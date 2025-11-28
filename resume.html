@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Résumé | DR1PD</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #05060a;
+      color: #f5f5f5;
+      line-height: 1.5;
+      scroll-behavior: smooth;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    /* ---------- Top ticker ---------- */
+    .ticker-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 32px;
+      background: #111827;
+      border-bottom: 1px solid #1f2933;
+      overflow: hidden;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+    }
+
+    .ticker-inner {
+      white-space: nowrap;
+      display: inline-flex;
+      animation: ticker-scroll 15s linear infinite;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      opacity: 0.8;
+      font-family: 'Times New Roman', Times, serif;
+    }
+
+    .ticker-item {
+      display: inline-flex;
+      align-items: center;
+      padding: 0 4rem;
+    }
+
+    @keyframes ticker-scroll {
+      0%   { transform: translateX(0); }
+      100% { transform: translateX(-100%); }
+    }
+
+    /* ---------- Navigation ---------- */
+    nav {
+      position: fixed;
+      top: 32px;
+      left: 0;
+      width: 100%;
+      background: rgba(5, 6, 10, 0.95);
+      backdrop-filter: blur(10px);
+      padding: 1rem 2rem;
+      z-index: 999;
+      border-bottom: 1px solid #1f2933;
+    }
+
+    .nav-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .nav-brand {
+      font-size: 1.2rem;
+      font-weight: 600;
+      font-family: 'Times New Roman', Times, serif;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      font-size: 0.9rem;
+    }
+
+    .nav-links a {
+      position: relative;
+      padding-bottom: 2px;
+      transition: opacity 0.2s ease;
+    }
+
+    .nav-links a:hover {
+      opacity: 0.7;
+    }
+
+    .nav-links a::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      height: 1.5px;
+      width: 0;
+      background: #ffffff;
+      transition: width 0.2s ease;
+    }
+
+    .nav-links a:hover::after {
+      width: 100%;
+    }
+
+    /* ---------- Main content ---------- */
+    .page {
+      padding-top: 96px;
+      min-height: 100vh;
+    }
+
+    .resume-container {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 2rem 1rem;
+      position: relative;
+    }
+
+    .download-icon {
+      position: absolute;
+      top: 2.5rem;
+      right: 2rem;
+      width: 28px;
+      height: 28px;
+      cursor: pointer;
+      opacity: 0.6;
+      transition: opacity 0.2s ease, transform 0.2s ease;
+      z-index: 10;
+    }
+
+    .download-icon:hover {
+      opacity: 1;
+      transform: scale(1.1);
+    }
+
+    .download-icon svg {
+      width: 100%;
+      height: 100%;
+      fill: #f5f5f5;
+    }
+
+    .pdf-viewer {
+      width: 100%;
+      height: calc(100vh - 150px);
+      min-height: 800px;
+      border: 1px solid #1f2933;
+      border-radius: 8px;
+      background: #0a0b0f;
+    }
+
+    .pdf-fallback {
+      text-align: center;
+      padding: 3rem;
+      background: rgba(17, 24, 39, 0.5);
+      border-radius: 8px;
+      border: 1px solid #1f2933;
+    }
+
+    .pdf-fallback p {
+      margin-bottom: 1rem;
+      opacity: 0.8;
+    }
+
+    /* ---------- Certificates Carousel ---------- */
+    .certificates-section {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background: #111827;
+      border-top: 1px solid #1f2933;
+      padding: 1rem 0;
+      z-index: 1000;
+    }
+
+    .certificates-track {
+      display: inline-flex;
+      align-items: center;
+      white-space: nowrap;
+      animation: cert-carousel-scroll 40s linear infinite;
+      gap: 2rem;
+    }
+
+    .certificate-item {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+      position: relative;
+    }
+
+    .certificate-item:hover {
+      transform: scale(1.05);
+    }
+
+    .certificate-thumbnail {
+      width: 180px;
+      height: 120px;
+      border: 2px solid rgba(148, 163, 184, 0.3);
+      border-radius: 8px;
+      overflow: hidden;
+      background: #0a0b0f;
+    }
+
+    .certificate-thumbnail embed {
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+
+    .certificate-name {
+      font-size: 0.75rem;
+      color: #f5f5f5;
+      opacity: 0;
+      transition: opacity 0.2s ease;
+      position: absolute;
+      bottom: -1.5rem;
+      white-space: nowrap;
+      background: rgba(17, 24, 39, 0.95);
+      padding: 0.3rem 0.6rem;
+      border-radius: 4px;
+      border: 1px solid rgba(148, 163, 184, 0.3);
+    }
+
+    .certificate-item:hover .certificate-name {
+      opacity: 1;
+    }
+
+    @keyframes cert-carousel-scroll {
+      0%   { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    .certificates-container {
+      overflow: hidden;
+      width: 100%;
+    }
+
+    /* Adjust main content to not be covered by carousel */
+    .page {
+      padding-top: 96px;
+      padding-bottom: 180px;
+      min-height: 100vh;
+    }
+  </style>
+</head>
+<body>
+  <!-- News-style ticker at top -->
+  <div class="ticker-bar">
+    <div class="ticker-inner">
+      <span class="ticker-item">THE WORLD IS YOUR PLAYGROUND.</span>
+      <span class="ticker-item">THE WORLD IS YOUR PLAYGROUND.</span>
+      <span class="ticker-item">THE WORLD IS YOUR PLAYGROUND.</span>
+      <span class="ticker-item">THE WORLD IS YOUR PLAYGROUND.</span>
+      <span class="ticker-item">THE WORLD IS YOUR PLAYGROUND.</span>
+      <span class="ticker-item">THE WORLD IS YOUR PLAYGROUND.</span>
+      <span class="ticker-item">THE WORLD IS YOUR PLAYGROUND.</span>
+      <span class="ticker-item">THE WORLD IS YOUR PLAYGROUND.</span>
+    </div>
+  </div>
+
+  <!-- Navigation -->
+  <nav>
+    <div class="nav-container">
+      <a href="index.html" class="nav-brand">DR1PD</a>
+      <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="quantitative.html">Quantitative</a>
+        <a href="creative.html">Creative</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main content -->
+  <div class="page">
+    <div class="resume-container">
+      <!-- PDF Embed -->
+      <!-- EDIT THIS: Replace "resume.pdf" with the path to your actual PDF file -->
+      <embed 
+        src="resume.pdf" 
+        type="application/pdf" 
+        class="pdf-viewer"
+      />
+
+      <!-- Fallback for browsers that don't support embed -->
+      <noscript>
+        <div class="pdf-fallback">
+          <p>Your browser does not support PDF embedding.</p>
+          <a href="resume.pdf" download class="download-btn">Download PDF</a>
+        </div>
+      </noscript>
+    </div>
+  </div>
+
+  <!-- Certificates Carousel -->
+  <div class="certificates-section">
+    <div class="certificates-container">
+      <div class="certificates-track">
+        <!-- EDIT THESE: Add your certificate PDFs here -->
+        <div class="certificate-item">
+          <div class="certificate-thumbnail">
+            <embed src="cert1.pdf" type="application/pdf" />
+          </div>
+          <span class="certificate-name">Google Data Analytics Certificate</span>
+        </div>
+
+        <div class="certificate-item">
+          <div class="certificate-thumbnail">
+            <embed src="cert2.pdf" type="application/pdf" />
+          </div>
+          <span class="certificate-name">AWS Cloud Practitioner</span>
+        </div>
+
+        <div class="certificate-item">
+          <div class="certificate-thumbnail">
+            <embed src="cert3.pdf" type="application/pdf" />
+          </div>
+          <span class="certificate-name">SQL & Databases Certification</span>
+        </div>
+
+        <div class="certificate-item">
+          <div class="certificate-thumbnail">
+            <embed src="cert4.pdf" type="application/pdf" />
+          </div>
+          <span class="certificate-name">Python for Data Science</span>
+        </div>
+
+        <div class="certificate-item">
+          <div class="certificate-thumbnail">
+            <embed src="cert5.pdf" type="application/pdf" />
+          </div>
+          <span class="certificate-name">Lean Six Sigma Green Belt</span>
+        </div>
+
+        <!-- Duplicate for seamless loop -->
+        <div class="certificate-item">
+          <div class="certificate-thumbnail">
+            <embed src="cert1.pdf" type="application/pdf" />
+          </div>
+          <span class="certificate-name">Google Data Analytics Certificate</span>
+        </div>
+
+        <div class="certificate-item">
+          <div class="certificate-thumbnail">
+            <embed src="cert2.pdf" type="application/pdf" />
+          </div>
+          <span class="certificate-name">AWS Cloud Practitioner</span>
+        </div>
+
+        <div class="certificate-item">
+          <div class="certificate-thumbnail">
+            <embed src="cert3.pdf" type="application/pdf" />
+          </div>
+          <span class="certificate-name">SQL & Databases Certification</span>
+        </div>
+
+        <div class="certificate-item">
+          <div class="certificate-thumbnail">
+            <embed src="cert4.pdf" type="application/pdf" />
+          </div>
+          <span class="certificate-name">Python for Data Science</span>
+        </div>
+
+        <div class="certificate-item">
+          <div class="certificate-thumbnail">
+            <embed src="cert5.pdf" type="application/pdf" />
+          </div>
+          <span class="certificate-name">Lean Six Sigma Green Belt</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

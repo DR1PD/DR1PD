@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Your Name | Portfolio</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    /* ---------- Base styles ---------- */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #05060a;
+      color: #f5f5f5;
+      line-height: 1.5;
+      scroll-behavior: smooth;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    /* ---------- Top ticker ---------- */
+    .ticker-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 32px;
+      background: #111827;
+      border-bottom: 1px solid #1f2933;
+      overflow: hidden;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+    }
+
+    .ticker-inner {
+      white-space: nowrap;
+      display: inline-flex;
+      animation: ticker-scroll 15s linear infinite;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      opacity: 0.8;
+      font-family: 'Times New Roman', Times, serif;
+    }
+
+    .ticker-item {
+      display: inline-flex;
+      align-items: center;
+      padding: 0 4rem;
+    }
+
+    @keyframes ticker-scroll {
+      0%   { transform: translateX(0); }
+      100% { transform: translateX(-100%); }
+    }
+
+    /* ---------- Layout wrappers ---------- */
+    .page {
+      min-height: 100vh;
+    }
+
+    /* add top padding so content isn't under the ticker */
+    .content {
+      padding-top: 32px;
+    }
+
+    /* ---------- Hero section ---------- */
+    .hero {
+      position: relative;
+      min-height: 85vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #f9fafb;
+      padding: 2rem;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      /* EDIT THIS: put your high-res photo URL here */
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image: url("your-high-res-photo.jpg");
+      background-size: cover;
+      background-position: center;
+      filter: brightness(0.35);
+      z-index: -2;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at top, rgba(15, 23, 42, 0.5), rgba(15, 23, 42, 0.9));
+      z-index: -1;
+    }
+
+    .hero-inner {
+      max-width: 960px;
+      width: 100%;
+      display: grid;
+      grid-template-columns: minmax(0, 2fr) minmax(260px, 1fr);
+      gap: 2rem;
+      align-items: start;
+    }
+
+    @media (max-width: 800px) {
+      .hero-inner {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* ---------- Header / Nav ---------- */
+    .hero-left {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .top-nav {
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      font-size: 0.95rem;
+      opacity: 0.95;
+      margin-top: -0.5rem;
+      position: relative;
+    }
+
+    .brand {
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 1.5rem;
+      font-size: 0.9rem;
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .nav-links a {
+      position: relative;
+      padding-bottom: 2px;
+    }
+
+    .nav-links a::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      height: 1.5px;
+      width: 0;
+      background: #ffffff;
+      transition: width 0.2s ease;
+    }
+
+    .nav-links a:hover::after {
+      width: 100%;
+    }
+
+    /* ---------- Hero main text ---------- */
+    .hero-title {
+      font-size: clamp(5rem, 10vw, 8rem);
+      font-weight: 400;
+      line-height: 1.05;
+      font-family: 'Times New Roman', Times, serif;
+    }
+
+    .hero-subtitle {
+      font-size: 1.05rem;
+      max-width: 34rem;
+      color: #e5e7eb;
+      opacity: 0.9;
+    }
+
+    .hero-tags {
+      margin-top: 0.5rem;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      opacity: 0.78;
+    }
+
+    /* ---------- Resume + Certifications ---------- */
+    .hero-right {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      align-items: flex-end;
+    }
+
+    .resume-btn {
+      padding: 0.6rem 1.3rem;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.8);
+      background: rgba(15, 23, 42, 0.7);
+      backdrop-filter: blur(10px);
+      font-size: 0.85rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      cursor: pointer;
+      transition: background 0.15s ease, transform 0.15s ease, border-color 0.15s ease;
+    }
+
+    .resume-btn:hover {
+      background: rgba(255, 255, 255, 0.15);
+      border-color: #ffffff;
+      transform: translateY(-1px);
+    }
+
+    .resume-btn:active {
+      transform: translateY(0);
+    }
+
+    /* Certifications slider under resume button */
+    .cert-bar {
+      margin-top: 0.5rem;
+      width: 100%;
+      max-width: 320px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      background: rgba(15, 23, 42, 0.8);
+      overflow: hidden;
+      padding: 0.35rem 0;
+    }
+
+    .cert-track {
+      display: inline-flex;
+      align-items: center;
+      white-space: nowrap;
+      animation: cert-scroll 18s linear infinite;
+    }
+
+    .cert-item {
+      display: inline-flex;
+      align-items: center;
+      padding: 0 1.25rem;
+      font-size: 0.75rem;
+      opacity: 0.9;
+      border-right: 1px solid rgba(51, 65, 85, 0.9);
+    }
+
+    .cert-item:last-child {
+      border-right: none;
+    }
+
+    @keyframes cert-scroll {
+      0%   { transform: translateX(0); }
+      100% { transform: translateX(-50%); } /* because we'll duplicate items */
+    }
+
+    .cert-label {
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      font-size: 0.7rem;
+      opacity: 0.6;
+      padding-left: 1rem;
+      padding-bottom: 0.15rem;
+      margin-top: 3rem;
+    }
+
+    /* ---------- Sections ---------- */
+    section {
+      padding: 4rem 1.5rem;
+    }
+
+    .section-inner {
+      max-width: 960px;
+      margin: 0 auto;
+    }
+
+    .section-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+    }
+
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.4rem;
+    }
+
+    .card {
+      border-radius: 1rem;
+      padding: 1.25rem 1.2rem 1.3rem;
+      background: radial-gradient(circle at top left, #111827, #020617);
+      border: 1px solid rgba(31, 41, 55, 0.9);
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.5);
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+    }
+
+    .card-title {
+      font-size: 1rem;
+      font-weight: 600;
+    }
+
+    .card-tagline {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      opacity: 0.7;
+    }
+
+    .card-body {
+      font-size: 0.9rem;
+      opacity: 0.9;
+      margin-top: 0.25rem;
+    }
+
+    .card-meta {
+      font-size: 0.8rem;
+      opacity: 0.7;
+      margin-top: 0.75rem;
+    }
+
+    /* ---------- Footer ---------- */
+    footer {
+      padding: 2rem 1.5rem 2.5rem;
+      border-top: 1px solid #111827;
+      font-size: 0.8rem;
+      color: #9ca3af;
+    }
+
+    footer .footer-inner {
+      max-width: 960px;
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 0.75rem;
+      align-items: center;
+    }
+
+    /* ---------- Utility ---------- */
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.2rem 0.55rem;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      opacity: 0.8;
+    }
+  </style>
+</head>
+<body>
+  <!-- News-style ticker at top -->
+  <div class="ticker-bar">
+    <div class="ticker-inner">
+      <span class="ticker-item">THE WORLD IS YOUR PLAYGROUND.</span>
+      <span class="ticker-item">THE WORLD IS YOUR PLAYGROUND.</span>
+      <span class="ticker-item">THE WORLD IS YOUR PLAYGROUND.</span>
+      <span class="ticker-item">THE WORLD IS YOUR PLAYGROUND.</span>
+      <span class="ticker-item">THE WORLD IS YOUR PLAYGROUND.</span>
+      <span class="ticker-item">THE WORLD IS YOUR PLAYGROUND.</span>
+      <span class="ticker-item">THE WORLD IS YOUR PLAYGROUND.</span>
+      <span class="ticker-item">THE WORLD IS YOUR PLAYGROUND.</span>
+    </div>
+  </div>
+
+  <div class="page">
+    <main class="content">
+      <!-- Hero -->
+      <section class="hero">
+        <div class="hero-inner">
+          <!-- Left: nav + main text -->
+          <div class="hero-left">
+            <div class="top-nav">
+              <div class="brand">
+                <!-- EDIT: Your name / logo -->
+              </div>
+              <nav class="nav-links">
+                <a href="#quantitative">Quantitative</a>
+                <a href="#creative">Creative</a>
+              </nav>
+            </div>
+
+            <div>
+              <!-- EDIT: Hero text -->
+              <h1 class="hero-title">
+                DR1PD
+              </h1>
+              <p class="hero-subtitle">
+                <!-- EDIT: Short summary -->
+                B.S./M.S, Industrial & Systems Engineering and M.A., Econometrics.
+              </p>
+              <p class="hero-tags">
+                ANALYSES · SYSTEMS · VISION · NARRATIVE
+              </p>
+            </div>
+          </div>
+
+          <!-- Right: resume button + certifications bar -->
+          <div class="hero-right">
+            <!-- EDIT: point this to your actual resume file -->
+            <a href="resume.pdf" class="resume-btn" target="_blank" rel="noopener">
+              Résumé
+            </a>
+
+            <div class="cert-label">Certifications</div>
+            <div class="cert-bar">
+              <div class="cert-track">
+                <!-- EDIT THESE: Put your certs or badges here.
+                     Duplicate sequence twice for smooth infinite scroll. -->
+                <div class="cert-item">Google Data Analytics</div>
+                <div class="cert-item">AWS Cloud Practitioner</div>
+                <div class="cert-item">SQL & Databases</div>
+                <div class="cert-item">Python for Data Science</div>
+                <div class="cert-item">Lean/Six Sigma Green Belt</div>
+
+                <!-- duplicate -->
+                <div class="cert-item">Google Data Analytics</div>
+                <div class="cert-item">AWS Cloud Practitioner</div>
+                <div class="cert-item">SQL & Databases</div>
+                <div class="cert-item">Python for Data Science</div>
+                <div class="cert-item">Lean Six Sigma Green Belt</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Projects section -->
+      <section id="projects">
+        <div class="section-inner">
+          <div style="display: flex; justify-content: center; margin-bottom: 2rem;">
+            <article class="card" style="max-width: 540px; width: 100%;">
+              <div class="card-tagline">?groundzero?</div>
+              <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; margin-top: 1rem; border-radius: 8px;">
+                <!-- EDIT THIS: Replace with your video URL -->
+                <iframe 
+                  style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;"
+                  src="https://www.youtube.com/embed/dQw4w9WgXcQ" 
+                  title="Project Video"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                  allowfullscreen>
+                </iframe>
+              </div>
+              <p class="card-body" style="margin-top: 1rem;">
+                This is my story; this is ground zero.
+              </p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- Creative section -->
+      <section id="creative">
+        <div class="section-inner">
+          <h2 class="section-title">Featured</h2>
+          <div class="card-grid">
+            <article class="card">
+              <div class="card-tagline">Machine Learning · Healthcare</div>
+              <h3 class="card-title">Medicare Fraud Detection</h3>
+              <p class="card-body">
+                Built supervised models to detect anomalous claims and provider behavior,
+                combining explainable ML with statistical baselines.
+              </p>
+              <p class="card-meta">
+                <span class="pill">Python</span>&nbsp;
+                <span class="pill">Scikit-learn</span>&nbsp;
+                <span class="pill">SHAP</span>
+              </p>
+            </article>
+
+            <article class="card">
+              <div class="card-tagline">Optimization · Analytics</div>
+              <h3 class="card-title">Automated Warehouse System Optimization</h3>
+              <p class="card-body">
+                Designed and evaluated an automated warehouse layout using discrete-event
+                simulation and NPV analysis to compare manual vs. automated configurations.
+              </p>
+              <p class="card-meta">
+                <span class="pill">Python</span>&nbsp;
+                <span class="pill">Gurobi</span>&nbsp;
+                <span class="pill">Simulation</span>
+              </p>
+            </article>
+            <!-- Add more creative cards as needed -->
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="footer-inner">
+        <div>© <span id="year"></span> DR1PD.</div>
+        <div>
+          <!-- EDIT: add your links -->
+          <a href="https://www.linkedin.com/in/dr1pd/" target="_blank" rel="noopener">LinkedIn</a> ·
+          <a href="mailto:david.colindres@live.com">Email</a>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    // Set current year in footer automatically
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>

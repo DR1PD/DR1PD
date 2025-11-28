@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Quantitative | DR1PD</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #05060a;
+      color: #f5f5f5;
+      line-height: 1.5;
+      scroll-behavior: smooth;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    /* ---------- Top ticker ---------- */
+    .ticker-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 32px;
+      background: #111827;
+      border-bottom: 1px solid #1f2933;
+      overflow: hidden;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+    }
+
+    .ticker-inner {
+      white-space: nowrap;
+      display: inline-flex;
+      animation: ticker-scroll 15s linear infinite;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      opacity: 0.8;
+      font-family: 'Times New Roman', Times, serif;
+    }
+
+    .ticker-item {
+      display: inline-flex;
+      align-items: center;
+      padding: 0 4rem;
+    }
+
+    @keyframes ticker-scroll {
+      0%   { transform: translateX(0); }
+      100% { transform: translateX(-100%); }
+    }
+
+    /* ---------- Navigation ---------- */
+    nav {
+      position: fixed;
+      top: 32px;
+      left: 0;
+      width: 100%;
+      background: rgba(5, 6, 10, 0.95);
+      backdrop-filter: blur(10px);
+      padding: 1rem 2rem;
+      z-index: 999;
+      border-bottom: 1px solid #1f2933;
+    }
+
+    .nav-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .nav-brand {
+      font-size: 1.2rem;
+      font-weight: 600;
+      font-family: 'Times New Roman', Times, serif;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      font-size: 0.9rem;
+    }
+
+    .nav-links a {
+      position: relative;
+      padding-bottom: 2px;
+      transition: opacity 0.2s ease;
+    }
+
+    .nav-links a:hover {
+      opacity: 0.7;
+    }
+
+    .nav-links a::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      height: 1.5px;
+      width: 0;
+      background: #ffffff;
+      transition: width 0.2s ease;
+    }
+
+    .nav-links a:hover::after {
+      width: 100%;
+    }
+
+    /* ---------- Main content ---------- */
+    .page {
+      padding-top: 96px;
+      min-height: 100vh;
+      padding-bottom: 4rem;
+    }
+
+    .projects-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 3rem 1.5rem;
+    }
+
+    .page-title {
+      font-size: 2.5rem;
+      font-weight: 400;
+      font-family: 'Times New Roman', Times, serif;
+      margin-bottom: 3rem;
+      text-align: center;
+    }
+
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    @media (max-width: 768px) {
+      .projects-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .project-card {
+      border-radius: 1rem;
+      padding: 1.25rem 1.2rem 1.3rem;
+      background: radial-gradient(circle at top left, #111827, #020617);
+      border: 1px solid rgba(31, 41, 55, 0.9);
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.5);
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      cursor: pointer;
+    }
+
+    .project-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 24px 48px rgba(0, 0, 0, 0.7);
+    }
+
+    .card-tagline {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      opacity: 0.7;
+    }
+
+    .card-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+    }
+
+    .card-media {
+      width: 100%;
+      height: 250px;
+      border-radius: 8px;
+      overflow: hidden;
+      background: #0a0b0f;
+      margin: 0.5rem 0;
+    }
+
+    .card-media img,
+    .card-media video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .card-body {
+      font-size: 0.9rem;
+      opacity: 0.9;
+      line-height: 1.6;
+    }
+
+    .card-meta {
+      font-size: 0.8rem;
+      opacity: 0.7;
+      margin-top: 0.5rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.2rem 0.55rem;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      opacity: 0.8;
+    }
+  </style>
+</head>
+<body>
+  <!-- News-style ticker at top -->
+  <div class="ticker-bar">
+    <div class="ticker-inner">
+      <span class="ticker-item">THE WORLD IS YOUR PLAYGROUND.</span>
+      <span class="ticker-item">THE WORLD IS YOUR PLAYGROUND.</span>
+      <span class="ticker-item">THE WORLD IS YOUR PLAYGROUND.</span>
+      <span class="ticker-item">THE WORLD IS YOUR PLAYGROUND.</span>
+      <span class="ticker-item">THE WORLD IS YOUR PLAYGROUND.</span>
+      <span class="ticker-item">THE WORLD IS YOUR PLAYGROUND.</span>
+      <span class="ticker-item">THE WORLD IS YOUR PLAYGROUND.</span>
+      <span class="ticker-item">THE WORLD IS YOUR PLAYGROUND.</span>
+    </div>
+  </div>
+
+  <!-- Navigation -->
+  <nav>
+    <div class="nav-container">
+      <a href="index.html" class="nav-brand">DR1PD</a>
+      <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="creative.html">Creative</a>
+        <a href="resume.html">Résumé</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main content -->
+  <div class="page">
+    <div class="projects-container">
+      <h1 class="page-title">Quantitative</h1>
+
+      <!-- Row 1 -->
+      <div class="projects-grid">
+        <article class="project-card">
+          <div class="card-tagline">Machine Learning · Healthcare</div>
+          <h3 class="card-title">Medicare Fraud Detection</h3>
+          <div class="card-media">
+            <!-- EDIT: Add your image/gif/video here -->
+            <img src="project1.jpg" alt="Medicare Fraud Detection">
+          </div>
+          <p class="card-body">
+            Built supervised models to detect anomalous claims and provider behavior,
+            combining explainable ML with statistical baselines.
+          </p>
+          <div class="card-meta">
+            <span class="pill">Python</span>
+            <span class="pill">Scikit-learn</span>
+            <span class="pill">SHAP</span>
+          </div>
+        </article>
+
+        <article class="project-card">
+          <div class="card-tagline">Optimization · Analytics</div>
+          <h3 class="card-title">Warehouse System Optimization</h3>
+          <div class="card-media">
+            <!-- EDIT: Add your image/gif/video here -->
+            <img src="project2.jpg" alt="Warehouse Optimization">
+          </div>
+          <p class="card-body">
+            Designed and evaluated an automated warehouse layout using discrete-event
+            simulation and NPV analysis.
+          </p>
+          <div class="card-meta">
+            <span class="pill">Python</span>
+            <span class="pill">Gurobi</span>
+            <span class="pill">Simulation</span>
+          </div>
+        </article>
+      </div>
+
+      <!-- Row 2 -->
+      <div class="projects-grid">
+        <article class="project-card">
+          <div class="card-tagline">Data Science · Finance</div>
+          <h3 class="card-title">Project Title 3</h3>
+          <div class="card-media">
+            <!-- EDIT: Add your image/gif/video here -->
+            <video autoplay loop muted playsinline>
+              <source src="project3.mp4" type="video/mp4">
+            </video>
+          </div>
+          <p class="card-body">
+            Description of your third quantitative project goes here. Explain the problem,
+            methodology, and impact.
+          </p>
+          <div class="card-meta">
+            <span class="pill">R</span>
+            <span class="pill">Statistics</span>
+            <span class="pill">Modeling</span>
+          </div>
+        </article>
+
+        <article class="project-card">
+          <div class="card-tagline">Operations Research</div>
+          <h3 class="card-title">Project Title 4</h3>
+          <div class="card-media">
+            <!-- EDIT: Add your image/gif/video here -->
+            <img src="project4.gif" alt="Project 4">
+          </div>
+          <p class="card-body">
+            Description of your fourth quantitative project goes here. Highlight the
+            technical approach and results achieved.
+          </p>
+          <div class="card-meta">
+            <span class="pill">MATLAB</span>
+            <span class="pill">Optimization</span>
+          </div>
+        </article>
+      </div>
+
+      <!-- Row 3 -->
+      <div class="projects-grid">
+        <article class="project-card">
+          <div class="card-tagline">Econometrics · Policy</div>
+          <h3 class="card-title">Project Title 5</h3>
+          <div class="card-media">
+            <!-- EDIT: Add your image/gif/video here -->
+            <img src="project5.jpg" alt="Project 5">
+          </div>
+          <p class="card-body">
+            Description of your fifth quantitative project goes here. Detail the
+            analysis methods and key findings.
+          </p>
+          <div class="card-meta">
+            <span class="pill">Stata</span>
+            <span class="pill">Regression</span>
+            <span class="pill">Causal Inference</span>
+          </div>
+        </article>
+
+        <article class="project-card">
+          <div class="card-tagline">Systems Engineering</div>
+          <h3 class="card-title">Project Title 6</h3>
+          <div class="card-media">
+            <!-- EDIT: Add your image/gif/video here -->
+            <img src="project6.jpg" alt="Project 6">
+          </div>
+          <p class="card-body">
+            Description of your sixth quantitative project goes here. Showcase the
+            systems thinking and problem-solving approach.
+          </p>
+          <div class="card-meta">
+            <span class="pill">Systems Design</span>
+            <span class="pill">Simulation</span>
+          </div>
+        </article>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

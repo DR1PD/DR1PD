@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="/support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,400&amp;family=IBM+Plex+Mono:wght@300;400&amp;family=Public+Sans:wght@300;400;500&amp;display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+<script src="https://cdn.jsdelivr.net/npm/topojson-client@3"></script>
+<style>
+  html, body { margin: 0; padding: 0; background: #05070d; overflow-x: hidden; }
+  body {
+    -webkit-font-smoothing: antialiased;
+    cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='22' height='22' viewBox='0 0 22 22'><circle cx='11' cy='11' r='9' fill='none' stroke='%23aebfe8' stroke-width='1.2'/><ellipse cx='11' cy='11' rx='4' ry='9' fill='none' stroke='%23aebfe8' stroke-width='0.8'/><path d='M2.6 8 h16.8 M2.6 14 h16.8' stroke='%23aebfe8' stroke-width='0.8' fill='none'/></svg>") 11 11, auto;
+  }
+  a, button, [role="button"] {
+    cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='22' height='22' viewBox='0 0 22 22'><circle cx='11' cy='11' r='9' fill='none' stroke='%238fb0ff' stroke-width='1.4'/><ellipse cx='11' cy='11' rx='4' ry='9' fill='none' stroke='%238fb0ff' stroke-width='0.9'/><path d='M2.6 8 h16.8 M2.6 14 h16.8' stroke='%238fb0ff' stroke-width='0.9' fill='none'/></svg>") 11 11, pointer;
+  }
+  ::selection { background: rgba(143,176,255,0.28); }
+  a { color: #e9edf7; }
+  a:hover { color: #8fb0ff; }
+  @keyframes caretBlink { 0%, 55% { opacity: 1; } 56%, 100% { opacity: 0; } }
+  @keyframes introMarquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+  @keyframes introZoom { from { transform: scale(0.55); } to { transform: scale(1.08); } }
+  @keyframes ambientA { 0% { transform: translate(-12vw,-8vh) scale(1); opacity: 0.14; } 25% { transform: translate(6vw,14vh) scale(1.2); opacity: 0.21; } 50% { transform: translate(16vw,-4vh) scale(1.3); opacity: 0.17; } 75% { transform: translate(-4vw,10vh) scale(1.1); opacity: 0.22; } 100% { transform: translate(-12vw,-8vh) scale(1); opacity: 0.14; } }
+  @keyframes ambientB { 0% { transform: translate(10vw,12vh) scale(1.15); opacity: 0.18; } 30% { transform: translate(-8vw,-6vh) scale(0.95); opacity: 0.12; } 60% { transform: translate(-14vw,8vh) scale(1.25); opacity: 0.19; } 100% { transform: translate(10vw,12vh) scale(1.15); opacity: 0.18; } }
+
+  /* ---- responsive: phones/tablets only (desktop untouched) ---- */
+  @media (max-width: 840px) {
+    [data-mq="split"] { grid-template-columns: 1fr !important; }
+    [data-mq="split"] > a { border-right: none !important; padding-left: 0 !important; padding-right: 0 !important; }
+    [data-mq="stats"] { display: flex !important; flex-wrap: wrap !important; justify-content: center !important; gap: 0.7rem 2rem !important; }
+    [data-mq="world"] { grid-template-columns: 1fr !important; }
+    [data-mq="proj"] { grid-template-columns: 1fr !important; gap: 1.1rem !important; }
+    [data-mq="proj"] > div:first-child { max-width: 420px; }
+    [data-mq="films"] { grid-template-columns: repeat(2, 1fr) !important; }
+    [data-mq="resume-body"] { grid-template-columns: 1fr !important; }
+    [data-mq="hero-row"] { flex-wrap: wrap !important; gap: 1.2rem !important; }
+  }
+  /* ---- large TVs: gently scale everything up ---- */
+  @media (min-width: 2200px) { html { font-size: 19px; } }
+</style>
+</helmet>
+
+<div style="min-height:100vh; background:#05070d; color:#e9edf7; font-family:'Public Sans',system-ui,sans-serif; font-weight:300; line-height:1.65;">
+
+  <!-- ambient drifting glow -->
+  <div aria-hidden="true" style="position:fixed; inset:0; z-index:0; pointer-events:none; overflow:hidden;">
+    <span style="position:absolute; top:8%; left:18%; width:55vw; height:55vw; background:radial-gradient(circle at center, rgba(110,140,255,0.5), transparent 65%); filter:blur(70px); animation:ambientA 52s ease-in-out infinite;"></span>
+    <span style="position:absolute; bottom:5%; right:12%; width:48vw; height:48vw; background:radial-gradient(circle at center, rgba(140,110,255,0.4), transparent 65%); filter:blur(70px); animation:ambientB 64s ease-in-out infinite;"></span>
+  </div>
+
+  <!-- Nav -->
+  <header style="position:fixed; top:0; left:0; right:0; z-index:100; display:flex; align-items:flex-start; justify-content:space-between; padding:0.9rem clamp(1.25rem,4vw,3rem); background:rgba(5,7,13,0.72); backdrop-filter:blur(12px); border-bottom:1px solid rgba(136,160,220,0.10);">
+    <a href="/" style="font-family:'Cormorant Garamond',serif; font-size:1.2rem; font-weight:500; letter-spacing:0.18em; text-decoration:none; color:#e9edf7; font-variant-numeric:lining-nums;">DR1PD</a>
+    <nav style="display:flex; gap:2rem; align-items:center;">
+      <a href="/q/" style="font-family:'IBM Plex Mono',monospace; font-size:0.66rem; letter-spacing:0.18em; text-transform:uppercase; color:#93a0bf; text-decoration:none;" style-hover="color:#e9edf7;">Quant</a>
+      <a href="/c/" style="font-family:'IBM Plex Mono',monospace; font-size:0.66rem; letter-spacing:0.18em; text-transform:uppercase; color:#93a0bf; text-decoration:none;" style-hover="color:#e9edf7;">Create</a>
+      <a href="/r/" style="font-family:'IBM Plex Mono',monospace; font-size:0.66rem; letter-spacing:0.18em; text-transform:uppercase; color:#e9edf7; text-decoration:none; border:1px solid rgba(136,160,220,0.28); border-radius:2px; padding:0.45rem 1rem;" style-hover="border-color:#8fb0ff; color:#8fb0ff;">Résumé</a>
+    </nav>
+  </header>
+
+  <!-- Intro: DR1PD typed on black, then fades to the site -->
+  <sc-if value="{{ introShowing }}" hint-placeholder-val="{{ false }}">
+    <div style="position:fixed; inset:0; z-index:300; background:#05070d; display:flex; align-items:center; justify-content:center; overflow:hidden; opacity:{{ introOpacity }}; transition:opacity 0.85s ease;">
+
+      <!-- fast-moving type, frozen at the end -->
+      <div style="position:absolute; inset:0; display:flex; flex-direction:column; justify-content:space-around; pointer-events:none;">
+        <div style="overflow:hidden; white-space:nowrap;">
+          <div style="display:inline-flex; animation:introMarquee 6s linear infinite; animation-play-state:{{ introPlay }}; will-change:transform;">
+            <span style="font-family:'Public Sans',sans-serif; font-weight:700; font-size:clamp(3.4rem,9vw,7rem); letter-spacing:-0.02em; text-transform:uppercase; color:rgba(233,237,247,0.08); white-space:nowrap; padding-right:3rem;">Quant research · Econometrics · Systems · Quant research · Econometrics · Systems ·&nbsp;</span>
+            <span style="font-family:'Public Sans',sans-serif; font-weight:700; font-size:clamp(3.4rem,9vw,7rem); letter-spacing:-0.02em; text-transform:uppercase; color:rgba(233,237,247,0.08); white-space:nowrap; padding-right:3rem;">Quant research · Econometrics · Systems · Quant research · Econometrics · Systems ·&nbsp;</span>
+          </div>
+        </div>
+        <div style="overflow:hidden; white-space:nowrap;">
+          <div style="display:inline-flex; animation:introMarquee 4.7s linear infinite reverse; animation-play-state:{{ introPlay }}; will-change:transform;">
+            <span style="font-family:'Public Sans',sans-serif; font-weight:700; font-size:clamp(3.4rem,9vw,7rem); letter-spacing:-0.02em; text-transform:uppercase; color:rgba(233,237,247,0.08); white-space:nowrap; padding-right:3rem;">Filmmaker · Storyteller · Determined · Resilient · 1 Pursuing Dreams ·&nbsp;</span>
+            <span style="font-family:'Public Sans',sans-serif; font-weight:700; font-size:clamp(3.4rem,9vw,7rem); letter-spacing:-0.02em; text-transform:uppercase; color:rgba(233,237,247,0.08); white-space:nowrap; padding-right:3rem;">Filmmaker · Storyteller · Determined · Resilient · 1 Pursuing Dreams ·&nbsp;</span>
+          </div>
+        </div>
+        <div style="overflow:hidden; white-space:nowrap;">
+          <div style="display:inline-flex; animation:introMarquee 5.3s linear infinite; animation-play-state:{{ introPlay }}; will-change:transform;">
+            <span style="font-family:'Public Sans',sans-serif; font-weight:700; font-size:clamp(3.4rem,9vw,7rem); letter-spacing:-0.02em; text-transform:uppercase; color:rgba(233,237,247,0.08); white-space:nowrap; padding-right:3rem;">The world is your playground · The world is your playground ·&nbsp;</span>
+            <span style="font-family:'Public Sans',sans-serif; font-weight:700; font-size:clamp(3.4rem,9vw,7rem); letter-spacing:-0.02em; text-transform:uppercase; color:rgba(233,237,247,0.08); white-space:nowrap; padding-right:3rem;">The world is your playground · The world is your playground ·&nbsp;</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- small fast-rotating globe between center and bottom row -->
+      <canvas id="introGlobe" width="360" height="360" style="position:absolute; left:50%; top:68%; transform:translate(-50%,-50%); width:clamp(90px,12vw,130px); height:clamp(90px,12vw,130px); pointer-events:none;"></canvas>
+
+      <div style="position:relative; text-align:center; padding:0 clamp(1.25rem,4vw,3rem);">
+        <h1 style="margin:0.6rem 0 1rem; font-family:'Cormorant Garamond',serif; font-weight:400; font-size:clamp(4.5rem,12vw,8.5rem); line-height:1; letter-spacing:0.05em; color:#e9edf7; font-variant-numeric:lining-nums;">
+          <span style="position:relative; display:inline-block;">
+            <span style="visibility:hidden;">DR1PD</span>
+            <span style="position:absolute; left:0; top:0; white-space:nowrap; display:flex; align-items:center; text-shadow:{{ introGlowShadow }}; transition:text-shadow 0.55s ease;">{{ introTyped }}<span style="display:inline-block; width:4px; height:0.78em; margin-left:0.06em; background:#8fb0ff; animation:caretBlink 0.9s steps(1) infinite;"></span></span>
+          </span>
+        </h1>
+        <p style="margin:0 auto; max-width:36rem; font-size:1rem; line-height:1.65; visibility:hidden;"><span style="font-family:'Cormorant Garamond',serif; font-size:1.5rem; letter-spacing:0.03em;">Designing a life worth documenting.</span><br><span style="font-size:0.82rem;">B.S./M.S., Industrial &amp; Systems Engineering • M.A., Econometrics</span></p>
+        <p style="margin:1rem 0 0; font-family:'Cormorant Garamond',serif; font-style:italic; font-size:1.1rem; visibility:hidden;">The world is your playground.</p>
+        <div style="margin-top:2.4rem; display:flex; justify-content:center; visibility:hidden;">
+          <span style="font-family:'IBM Plex Mono',monospace; font-size:0.7rem; letter-spacing:0.24em; text-transform:uppercase; padding-bottom:5px; border-bottom:1px solid transparent;">☕️, on me.</span>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <!-- Hero -->
+  <section data-screen-label="Hero" style="position:relative; min-height:100vh; display:flex; align-items:center; justify-content:center; overflow:hidden;">
+    <sc-if value="{{ videoMode }}" hint-placeholder-val="{{ false }}">
+      <video id="broll" src="/broll.mp4" autoplay="{{ true }}" muted="{{ true }}" loop="{{ true }}" playsinline="{{ true }}" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:0.38; filter:saturate(0.7) brightness(0.75); transition:opacity 0.6s ease;"></video>
+      <div style="position:absolute; inset:0; background:radial-gradient(ellipse at center, transparent 30%, #05070d 95%);"></div>
+    </sc-if>
+    <div style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:min(110vmin,900px); height:min(110vmin,900px); background:radial-gradient(circle at center, rgba(95,125,255,0.07), transparent 60%); pointer-events:none;"></div>
+
+    <div style="position:relative; z-index:2; text-align:center; padding:0 clamp(1.25rem,4vw,3rem);">
+      
+      <h1 style="margin:0.6rem 0 1rem; font-family:'Cormorant Garamond',serif; font-weight:400; font-size:clamp(4.5rem,12vw,8.5rem); line-height:1; letter-spacing:0.05em; color:#e9edf7; font-variant-numeric:lining-nums;">
+        <span style="position:relative; display:inline-block;">
+          <span style="visibility:hidden;">DR1PD</span>
+          <span style="position:absolute; left:0; top:0; white-space:nowrap; color:#e9edf7; clip-path:{{ heroBaseClip }}; transition:clip-path 0.85s cubic-bezier(0.65,0,0.35,1);">DR1PD</span>
+          <span style="position:absolute; left:0; top:0; white-space:nowrap; color:#8fb0ff; text-shadow:0 0 30px rgba(143,176,255,0.35); clip-path:{{ heroAltClip }}; transition:clip-path 0.85s cubic-bezier(0.65,0,0.35,1);">WDIYP</span>
+          <span onMouseEnter="{{ enterNavSwitch }}" onMouseLeave="{{ leaveNavSwitch }}" onClick="{{ openWdiyp }}" role="button" aria-label="Switch to WDIYP.com" style="position:absolute; top:-0.18em; right:-0.42em; padding:10px; display:inline-flex; cursor:pointer;">
+            <span style="position:relative; width:26px; height:13px; border:1px solid rgba(136,160,220,0.4); border-radius:999px; display:inline-block; background:rgba(5,7,13,0.7);">
+              <span style="position:absolute; top:2px; left:{{ navKnobLeft }}; width:7px; height:7px; border-radius:50%; background:#8fb0ff; transition:left 0.25s ease;"></span>
+            </span>
+          </span>
+        </span>
+      </h1>
+      <p style="margin:0 auto; max-width:36rem; color:#93a0bf; font-size:1rem;"><span style="font-family:'Cormorant Garamond',serif; font-size:1.5rem; color:#e9edf7; letter-spacing:0.03em;">Designing a life worth documenting.</span><br><font color="#5c6885"><span style="font-size: 0.82rem;">B.S./M.S., Industrial &amp; Systems Engineering • M.A., Econometrics</span></font></p>
+      <p style="margin:1rem 0 0; font-family:'Cormorant Garamond',serif; font-style:italic; font-size:1.1rem; opacity:0.85;"><a href="https://wdiyp.com" target="_blank" rel="noopener" style="color:#8fb0ff; text-decoration:none;" style-hover="color:#e9edf7;">The world is your playground.</a></p>
+      <div style="margin-top:2.4rem; display:flex; justify-content:center;">
+        <a href="https://cal.com/dr1pd/c?overlayCalendar=true" target="_blank" rel="noopener" onMouseEnter="{{ enterCoffee }}" onMouseLeave="{{ leaveCoffee }}" style="background-image:linear-gradient(#8fb0ff,#8fb0ff); background-repeat:no-repeat; background-position:left bottom; background-size:{{ coffeeEnterSize }}; transition:background-size 0.25s ease-out, color 0.2s ease; font-family:'IBM Plex Mono',monospace; font-size:0.7rem; letter-spacing:0.24em; text-transform:uppercase; color:{{ coffeeColor }}; text-decoration:none; padding-bottom:4px;">☕️, on me.</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- The split -->
+  <section data-screen-label="Split" style="padding:6rem clamp(1.25rem,4vw,3rem) 4.5rem;">
+    <div style="max-width:1020px; margin:0 auto;">
+      <div data-mq="split" style="display:grid; grid-template-columns:1fr 1fr; gap:0;">
+        <a href="/q/" onMouseEnter="{{ enterQuantCard }}" onMouseLeave="{{ leaveQuantCard }}" style="display:block; text-decoration:none; color:inherit; padding:2.6rem 3rem 2.6rem 0; border-right:1px solid rgba(136,160,220,0.15); border-top:1px solid rgba(136,160,220,0.15); border-bottom:1px solid rgba(136,160,220,0.15); transition:border-color 0.25s ease, background 0.25s ease, box-shadow 0.25s ease;" style-hover="border-color:#8fb0ff; background:rgba(143,176,255,0.05); box-shadow:0 0 24px rgba(143,176,255,0.12);">
+          <span style="font-family:'IBM Plex Mono',monospace; font-size:0.62rem; letter-spacing:0.3em; text-transform:uppercase; color:#5c6885;">Left Brain</span>
+          <h2 style="margin:0.8rem 0 0.7rem; font-family:'Cormorant Garamond',serif; font-weight:400; font-size:clamp(2.4rem,4.5vw,3.4rem); line-height:1; color:#e9edf7;">Quant</h2>
+          <p style="margin:0; color:#93a0bf; font-size:0.92rem; max-width:26rem;">Machine learning, optimization, and portfolio research — from a defended thesis to a live quant monorepo.</p>
+          <span style="display:inline-block; margin-top:1.4rem; padding-bottom:4px; background-image:linear-gradient(#8fb0ff,#8fb0ff); background-repeat:no-repeat; background-position:left bottom; background-size:{{ quantEnterSize }}; transition:background-size 0.25s ease-out; font-family:'IBM Plex Mono',monospace; font-size:0.64rem; letter-spacing:0.22em; text-transform:uppercase; color:#8fb0ff;">Enter →</span>
+        </a>
+        <a href="/c/" onMouseEnter="{{ enterCreateCard }}" onMouseLeave="{{ leaveCreateCard }}" style="display:block; text-decoration:none; color:inherit; padding:2.6rem 0 2.6rem 3rem; border-top:1px solid rgba(136,160,220,0.15); border-bottom:1px solid rgba(136,160,220,0.15); transition:border-color 0.25s ease, background 0.25s ease, box-shadow 0.25s ease;" style-hover="border-color:#8fb0ff; background:rgba(143,176,255,0.05); box-shadow:0 0 24px rgba(143,176,255,0.12);">
+          <span style="font-family:'IBM Plex Mono',monospace; font-size:0.62rem; letter-spacing:0.3em; text-transform:uppercase; color:#5c6885;">Right Brain</span>
+          <h2 style="margin:0.8rem 0 0.7rem; font-family:'Cormorant Garamond',serif; font-weight:400; font-size:clamp(2.4rem,4.5vw,3.4rem); line-height:1; color:#e9edf7;">Create</h2>
+          <p style="margin:0; color:#93a0bf; font-size:0.92rem; max-width:26rem;">One film decalogy, one hundred ambitions, one lifetime — the story running underneath the numbers.</p>
+          <span style="display:inline-block; margin-top:1.4rem; padding-bottom:4px; background-image:linear-gradient(#8fb0ff,#8fb0ff); background-repeat:no-repeat; background-position:left bottom; background-size:{{ createEnterSize }}; transition:background-size 0.25s ease-out; font-family:'IBM Plex Mono',monospace; font-size:0.64rem; letter-spacing:0.22em; text-transform:uppercase; color:#8fb0ff;">Enter →</span>
+        </a>
+      </div>
+
+      <!-- Stats line -->
+      <div data-mq="stats" style="display:grid; grid-template-columns:repeat(5, 1fr); align-items:center; justify-items:center; padding:2.2rem 0 0; font-family:'IBM Plex Mono',monospace; font-size:0.62rem; letter-spacing:0.2em; text-transform:uppercase; color:#5c6885;">
+        <span>Determined</span>
+        <span>Resilient</span>
+        <span>1</span>
+        <span>Pursuing</span>
+        <span>Dreams</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- World -->
+  <section data-screen-label="World" style="padding:3rem clamp(1.25rem,4vw,3rem) 5rem;">
+    <div data-mq="world" style="max-width:1100px; margin:0 auto; display:grid; grid-template-columns:clamp(340px,38vw,440px) 1fr; gap:2rem; align-items:stretch;">
+
+      <!-- Left rail -->
+      <div style="display:flex; flex-direction:column; gap:2rem;">
+        <div onClick="{{ openBucket }}" role="button" aria-label="Expand bucket list" style="border:1px solid rgba(136,160,220,0.15); padding:1.4rem; display:flex; flex-direction:column; align-items:center; gap:0.55rem; cursor:pointer; transition:border-color 0.25s ease, background 0.25s ease, box-shadow 0.25s ease;" style-hover="border-color:#8fb0ff; background:rgba(143,176,255,0.05); box-shadow:0 0 24px rgba(143,176,255,0.12);">
+          <span style="align-self:flex-start; font-family:'IBM Plex Mono',monospace; font-size:0.6rem; letter-spacing:0.28em; text-transform:uppercase; color:#5c6885;">Bucket list</span>
+          <p style="margin:0; text-align:center; font-family:'Cormorant Garamond',serif; font-size:clamp(1.8rem,3vw,2.4rem); color:#e9edf7; font-variant-numeric:lining-nums;">{{ bucketFraction }}</p>
+          <!-- 100 goals: 4 columns × 25 rows, every cell identical -->
+          <svg viewBox="0 0 300 240" style="width:100%; display:block;" aria-hidden="true">
+            <defs>
+              <pattern id="goalRows" width="300" height="9.6" patternUnits="userSpaceOnUse">
+                <line x1="0" y1="0.5" x2="300" y2="0.5" stroke="rgba(136,160,220,0.13)" stroke-width="1"></line>
+              </pattern>
+            </defs>
+            <rect x="0" y="0" width="300" height="240" fill="url(#goalRows)"></rect>
+            <g stroke="rgba(136,160,220,0.13)" stroke-width="1" fill="none">
+              <rect x="0.5" y="0.5" width="299" height="239"></rect>
+              <line x1="75" y1="0" x2="75" y2="240"></line>
+              <line x1="150" y1="0" x2="150" y2="240"></line>
+              <line x1="225" y1="0" x2="225" y2="240"></line>
+            </g>
+            <!-- goal 77 = column 4, row 2 -->
+            <circle cx="262.5" cy="14.4" r="2.8" fill="#ffffff" opacity="0.95"></circle>
+            <circle cx="262.5" cy="14.4" r="6.5" fill="none" stroke="rgba(255,255,255,0.35)" stroke-width="1"></circle>
+          </svg>
+        </div>
+        <div onClick="{{ openAchievements }}" role="button" aria-label="Expand achievements" style="flex:1; border:1px solid rgba(136,160,220,0.15); padding:1.8rem; display:flex; flex-direction:column; justify-content:space-between; cursor:pointer; transition:border-color 0.25s ease, background 0.25s ease, box-shadow 0.25s ease;" style-hover="border-color:#8fb0ff; background:rgba(143,176,255,0.05); box-shadow:0 0 24px rgba(143,176,255,0.12);">
+          <span style="font-family:'IBM Plex Mono',monospace; font-size:0.6rem; letter-spacing:0.28em; text-transform:uppercase; color:#5c6885;">Achievements</span>
+          <div style="margin-top:1.4rem; display:flex; align-items:center; gap:0.9rem; min-width:0; opacity:{{ achOpacity }}; transition:opacity 0.45s ease;">
+            <span style="flex:none; width:44px; height:44px; border:1px solid rgba(136,160,220,0.3); display:flex; align-items:center; justify-content:center; font-family:'Cormorant Garamond',serif; font-size:1.1rem; color:#8fb0ff; background:rgba(143,176,255,0.06);">◆</span>
+            <div style="min-width:0;">
+              <p style="margin:0; font-family:'Cormorant Garamond',serif; font-size:clamp(1.5rem,2.1vw,1.95rem); line-height:1.1; color:#e9edf7; font-variant-numeric:lining-nums; white-space:nowrap;">{{ achTitle }}</p>
+              <p style="margin:0.35rem 0 0; font-family:'IBM Plex Mono',monospace; font-size:0.56rem; letter-spacing:0.16em; text-transform:uppercase; color:#5c6885; white-space:nowrap;">{{ achSub }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Globe -->
+      <div style="position:relative; display:flex; flex-direction:column; align-items:center; justify-content:center;">
+        <canvas id="globeOrb" width="1400" height="1400" style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:min(90vw,700px); height:min(90vw,700px); opacity:0.5; pointer-events:none;"></canvas>
+        <canvas id="globe" width="1120" height="1120" style="position:relative; width:min(100%,540px); aspect-ratio:1/1; height:auto; touch-action:none;"></canvas>
+        <p onClick="{{ openCountries }}" role="button" aria-label="Expand visited countries" style="position:relative; margin:0.8rem 0 0; font-family:'Cormorant Garamond',serif; font-size:clamp(1.5rem,3vw,2rem); color:#e9edf7; font-variant-numeric:lining-nums; cursor:pointer; padding:0.1rem 0.6rem; border:1px solid transparent; transition:border-color 0.25s ease, background 0.25s ease, box-shadow 0.25s ease;" style-hover="border-color:#8fb0ff; background:rgba(143,176,255,0.05); box-shadow:0 0 24px rgba(143,176,255,0.12);">{{ visitedFraction }}</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Bucket list expanded -->
+  <sc-if value="{{ bucketOpen }}" hint-placeholder-val="{{ false }}">
+    <div data-screen-label="Bucket list expanded" onClick="{{ closeBucket }}" style="position:fixed; inset:0; z-index:200; background:rgba(5,7,13,0.88); backdrop-filter:blur(6px); display:flex; align-items:center; justify-content:center; padding:clamp(1rem,3vw,2.5rem);">
+      <div onClick="{{ stopClick }}" style="position:relative; width:min(1080px,100%); box-sizing:border-box; max-height:92vh; overflow:auto; background:#05070d; border:1px solid rgba(136,160,220,0.25); padding:clamp(1.2rem,3vw,2.2rem);">
+        <span onClick="{{ closeBucket }}" role="button" aria-label="Close" style="position:absolute; top:0.55rem; right:0.7rem; font-family:'IBM Plex Mono',monospace; font-size:0.9rem; color:#5c6885; cursor:pointer; padding:0.2rem 0.4rem; transition:color 0.2s ease;" style-hover="color:#e9edf7;">✕</span>
+        <span style="position:absolute; top:0.92rem; left:0.7rem; padding:0.2rem 0.4rem; line-height:0.9rem; font-family:'IBM Plex Mono',monospace; font-size:0.62rem; letter-spacing:0.3em; text-transform:uppercase; color:#5c6885;">Bucket list</span>
+        <div style="position:relative; display:flex; align-items:baseline; margin-bottom:1.2rem; min-height:2rem;">
+          <span style="position:absolute; left:50%; transform:translateX(-50%); font-family:'Cormorant Garamond',serif; font-size:1.6rem; color:#e9edf7; font-variant-numeric:lining-nums;">{{ bucketFraction }}</span>
+        </div>
+        <div style="display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); grid-template-rows:repeat(34,minmax(22px,auto)); grid-auto-flow:column; border-top:1px solid rgba(136,160,220,0.13); border-left:1px solid rgba(136,160,220,0.13);">
+          <sc-for list="{{ goalCells }}" as="cell" hint-placeholder-count="8">
+            <div style="position:relative; display:flex; align-items:center; gap:0.45rem; padding:0.15rem 0.55rem; min-width:0; border-right:1px solid rgba(136,160,220,0.13); border-bottom:1px solid rgba(136,160,220,0.13); background:{{ cell.bg }};">
+              <span style="font-family:'IBM Plex Mono',monospace; font-size:0.55rem; color:{{ cell.numColor }}; font-variant-numeric:lining-nums; min-width:1.7em; text-align:right;">{{ cell.n }}</span>
+              <span style="flex:1; display:{{ cell.textDisplay }}; text-align:left; font-family:'IBM Plex Mono',monospace; font-size:0.6rem; letter-spacing:0.04em; color:{{ cell.textColor }}; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{ cell.label }}</span>
+              <span style="position:absolute; inset:0; display:{{ cell.lockDisplay }}; align-items:center; justify-content:center; pointer-events:none;">
+                <svg width="9" height="11" viewBox="0 0 9 11" aria-hidden="true" style="display:block; opacity:0.55;">
+                  <path d="M2.4 4.4 V2.9 a2.1 2.1 0 0 1 4.2 0 V4.4" fill="none" stroke="#8fb0ff" stroke-width="1"></path>
+                  <rect x="1" y="4.4" width="7" height="5.6" rx="1" fill="none" stroke="#8fb0ff" stroke-width="1"></rect>
+                </svg>
+              </span>
+            </div>
+          </sc-for>
+          <div style="grid-column:3; grid-row:33 / span 2; display:flex; align-items:center; justify-content:center;">
+            <canvas id="bucketGlobe" width="160" height="160" style="width:40px; height:40px; display:block; pointer-events:none;"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <!-- Achievements wall -->
+  <sc-if value="{{ achOpen }}" hint-placeholder-val="{{ false }}">
+    <div data-screen-label="Achievements wall" onClick="{{ closeAchievements }}" style="position:fixed; inset:0; z-index:200; background:rgba(5,7,13,0.88); backdrop-filter:blur(6px); display:flex; align-items:center; justify-content:center; padding:clamp(1rem,3vw,2.5rem);">
+      <div onClick="{{ stopClick }}" style="position:relative; width:min(1060px,100%); box-sizing:border-box; max-height:92vh; overflow:auto; background:#05070d; border:1px solid rgba(136,160,220,0.25); padding:clamp(1.2rem,3vw,2.2rem);">
+        <span onClick="{{ closeAchievements }}" role="button" aria-label="Close" style="position:absolute; top:0.55rem; right:0.7rem; font-family:'IBM Plex Mono',monospace; font-size:0.9rem; color:#5c6885; cursor:pointer; padding:0.2rem 0.4rem; transition:color 0.2s ease;" style-hover="color:#e9edf7;">✕</span>
+        <span style="position:absolute; top:0.92rem; left:0.7rem; padding:0.2rem 0.4rem; line-height:0.9rem; font-family:'IBM Plex Mono',monospace; font-size:0.62rem; letter-spacing:0.3em; text-transform:uppercase; color:#5c6885;">Achievements</span>
+        <div style="position:relative; display:flex; align-items:baseline; margin-bottom:1.4rem; min-height:2rem;">
+          <span style="position:absolute; left:50%; transform:translateX(-50%); font-family:'Cormorant Garamond',serif; font-size:1.6rem; color:#e9edf7; font-variant-numeric:lining-nums;">{{ achCount }}</span>
+        </div>
+        <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(215px,1fr)); gap:0.9rem;">
+          <sc-for list="{{ achWall }}" as="a" hint-placeholder-count="8">
+            <a href="{{ a.href }}" target="_blank" rel="noopener" onClick="{{ a.onClick }}" style="text-decoration:none; color:inherit; cursor:{{ a.cursor }}; display:flex; align-items:center; gap:0.8rem; padding:0.85rem 1rem; background:#0a0f1b; border:1px solid rgba(136,160,220,0.18); box-shadow:0 6px 18px rgba(0,0,0,0.45); transition:border-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;" style-hover="border-color:#8fb0ff; transform:translateY(-3px); box-shadow:0 10px 26px rgba(0,0,0,0.6), 0 0 20px rgba(143,176,255,0.14);">
+              <span style="flex:none; width:38px; height:38px; border:1px solid rgba(136,160,220,0.3); display:flex; align-items:center; justify-content:center; font-family:'Cormorant Garamond',serif; font-size:1.05rem; color:#8fb0ff; background:rgba(143,176,255,0.06);">{{ a.icon }}</span>
+              <span style="min-width:0; display:flex; flex-direction:column; gap:0.25rem;">
+                <span style="font-family:'Cormorant Garamond',serif; font-size:1.05rem; line-height:1.1; color:#e9edf7;">{{ a.t }}</span>
+                <span style="font-family:'IBM Plex Mono',monospace; font-size:0.52rem; letter-spacing:0.14em; text-transform:uppercase; color:#5c6885;">{{ a.s }}</span>
+              </span>
+            </a>
+          </sc-for>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <!-- Countries expanded -->
+  <sc-if value="{{ countriesOpen }}" hint-placeholder-val="{{ false }}">
+    <div data-screen-label="Countries expanded" onClick="{{ closeCountries }}" style="position:fixed; inset:0; z-index:200; background:rgba(5,7,13,0.88); backdrop-filter:blur(6px); display:flex; align-items:center; justify-content:center; padding:clamp(1rem,3vw,2.5rem);">
+      <div onClick="{{ stopClick }}" style="position:relative; width:min(720px,100%); box-sizing:border-box; max-height:92vh; overflow:auto; background:#05070d; border:1px solid rgba(136,160,220,0.25); padding:clamp(1.2rem,3vw,2.2rem);">
+        <span onClick="{{ closeCountries }}" role="button" aria-label="Close" style="position:absolute; top:0.55rem; right:0.7rem; font-family:'IBM Plex Mono',monospace; font-size:0.9rem; color:#5c6885; cursor:pointer; padding:0.2rem 0.4rem; transition:color 0.2s ease;" style-hover="color:#e9edf7;">✕</span>
+        <span style="position:absolute; top:0.92rem; left:0.7rem; padding:0.2rem 0.4rem; line-height:0.9rem; font-family:'IBM Plex Mono',monospace; font-size:0.62rem; letter-spacing:0.3em; text-transform:uppercase; color:#5c6885;">Countries</span>
+        <div style="position:relative; display:flex; align-items:baseline; margin-bottom:1.2rem; min-height:2rem;">
+          <span style="position:absolute; left:50%; transform:translateX(-50%); font-family:'Cormorant Garamond',serif; font-size:1.6rem; color:#e9edf7; font-variant-numeric:lining-nums;">{{ visitedFraction }}</span>
+        </div>
+        <div style="display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); grid-template-rows:repeat(13,minmax(26px,auto)); grid-auto-flow:column; border-top:1px solid rgba(136,160,220,0.13); border-left:1px solid rgba(136,160,220,0.13);">
+          <sc-for list="{{ countryCells }}" as="cell" hint-placeholder-count="6">
+            <div style="display:flex; align-items:center; gap:0.55rem; padding:0.2rem 0.65rem; min-width:0; border-right:1px solid rgba(136,160,220,0.13); border-bottom:1px solid rgba(136,160,220,0.13);">
+              <span style="font-family:'IBM Plex Mono',monospace; font-size:0.55rem; color:#8fb0ff; font-variant-numeric:lining-nums; min-width:1.4em; text-align:right;">{{ cell.n }}</span>
+              <span style="flex:1; text-align:left; font-family:'IBM Plex Mono',monospace; font-size:0.62rem; letter-spacing:0.06em; color:#e9edf7; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{ cell.name }}</span>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <!-- Card (contact) -->
+  <section data-screen-label="Contact card" style="padding:6rem clamp(1.25rem,4vw,3rem) 7rem; border-top:1px solid rgba(136,160,220,0.10); display:flex; justify-content:center;">
+    <div style="display:inline-grid; grid-template-columns:auto auto auto auto; justify-content:center; align-items:start;">
+
+      <!-- the address -->
+      <a href="mailto:D@DR1PD.com" onMouseEnter="{{ enterEmail }}" onMouseLeave="{{ leaveZone }}" style="grid-column:1/2; grid-row:1; text-decoration:none; font-family:'Cormorant Garamond',serif; font-size:clamp(2rem,5.5vw,3.4rem); line-height:1.1; color:{{ dColor }}; transition:color 0.25s ease; font-variant-numeric:lining-nums;">D</a>
+      <span style="grid-column:2/3; grid-row:1; font-family:'Cormorant Garamond',serif; font-size:clamp(2rem,5.5vw,3.4rem); line-height:1.1; color:{{ handleColor }}; transition:color 0.25s ease;">@</span>
+      <span style="grid-column:3/4; grid-row:1; font-family:'Cormorant Garamond',serif; font-size:clamp(2rem,5.5vw,3.4rem); line-height:1.1; color:{{ handleColor2 }}; transition:color 0.25s ease; font-variant-numeric:lining-nums;">DR1PD</span>
+      <span style="grid-column:4/5; grid-row:1; font-family:'Cormorant Garamond',serif; font-size:clamp(2rem,5.5vw,3.4rem); line-height:1.1; color:{{ comColor }}; transition:color 0.25s ease;">.com</span>
+
+      <!-- layer 1: me + socials -->
+      <div onMouseEnter="{{ enterMe }}" onMouseLeave="{{ leaveZone }}" style="grid-column:1/2; grid-row:2; padding-top:0.8rem; margin-right:0.7rem;">
+        <div style="height:8px; border-left:1px solid {{ meColor }}; border-right:1px solid {{ meColor }}; border-bottom:1px solid {{ meColor }}; transition:border-color 0.25s ease;"></div>
+        <div style="margin-top:5px; text-align:center; font-family:'IBM Plex Mono',monospace; font-size:0.58rem; letter-spacing:0.22em; text-transform:uppercase; color:{{ meColor }}; transition:color 0.25s ease;">me</div>
+      </div>
+      <div onMouseEnter="{{ enterHandle }}" onMouseLeave="{{ leaveZone }}" style="grid-column:2/4; grid-row:2; padding-top:0.8rem; position:relative;">
+        <div style="height:8px; border-left:1px solid {{ handleLineColor }}; border-right:1px solid {{ handleLineColor }}; border-bottom:1px solid {{ handleLineColor }}; transition:border-color 0.25s ease;"></div>
+        <div style="margin-top:5px; text-align:center; font-family:'IBM Plex Mono',monospace; font-size:0.58rem; letter-spacing:0.22em; text-transform:uppercase; color:{{ handleLineColor }}; transition:color 0.25s ease;">socials</div>
+        <div onMouseEnter="{{ enterHandle }}" onMouseLeave="{{ leaveZone }}" style="position:absolute; top:100%; left:50%; transform:translateX(-50%); display:flex; gap:0.5rem; padding:10px 12px 12px; opacity:{{ socialOpacity }}; pointer-events:{{ socialPointer }}; transition:opacity 0.25s ease; z-index:20;">
+          <a href="https://www.instagram.com/dr1pd" target="_blank" rel="noopener" aria-label="Instagram" style="width:34px; height:34px; display:flex; align-items:center; justify-content:center; border:1px solid rgba(136,160,220,0.28); background:#0a0f1b; text-decoration:none; transition:border-color 0.25s ease, background 0.25s ease, box-shadow 0.25s ease;" style-hover="border-color:#8fb0ff; background:rgba(143,176,255,0.05); box-shadow:0 0 24px rgba(143,176,255,0.12);"><img src="/social-ig-sq.png" alt="" style="width:17px; height:17px; opacity:0.8;"></a>
+          <a href="https://www.youtube.com/@dr1pd" target="_blank" rel="noopener" aria-label="YouTube" style="width:34px; height:34px; display:flex; align-items:center; justify-content:center; border:1px solid rgba(136,160,220,0.28); background:#0a0f1b; text-decoration:none; transition:border-color 0.25s ease, background 0.25s ease, box-shadow 0.25s ease;" style-hover="border-color:#8fb0ff; background:rgba(143,176,255,0.05); box-shadow:0 0 24px rgba(143,176,255,0.12);"><img src="/social-yt-sq.png" alt="" style="width:17px; height:17px; opacity:0.8;"></a>
+          <a href="https://www.linkedin.com/in/dr1pd/" target="_blank" rel="noopener" aria-label="LinkedIn" style="width:34px; height:34px; display:flex; align-items:center; justify-content:center; border:1px solid rgba(136,160,220,0.28); background:#0a0f1b; text-decoration:none; transition:border-color 0.25s ease, background 0.25s ease, box-shadow 0.25s ease;" style-hover="border-color:#8fb0ff; background:rgba(143,176,255,0.05); box-shadow:0 0 24px rgba(143,176,255,0.12);"><img src="/social-li-sq.png" alt="" style="width:17px; height:17px; opacity:0.8;"></a>
+          <a href="https://github.com/dr1pd" target="_blank" rel="noopener" aria-label="GitHub" style="width:34px; height:34px; display:flex; align-items:center; justify-content:center; border:1px solid rgba(136,160,220,0.28); background:#0a0f1b; text-decoration:none; transition:border-color 0.25s ease, background 0.25s ease, box-shadow 0.25s ease;" style-hover="border-color:#8fb0ff; background:rgba(143,176,255,0.05); box-shadow:0 0 24px rgba(143,176,255,0.12);"><img src="/social-gh-sq.png" alt="" style="width:17px; height:17px; opacity:0.8;"></a>
+        </div>
+      </div>
+
+      <!-- layer 2: website -->
+      <div onMouseEnter="{{ enterWeb }}" onMouseLeave="{{ leaveZone }}" style="grid-column:3/5; grid-row:3; padding-top:0.55rem; position:relative;">
+        <div style="height:8px; border-left:1px solid {{ webColor }}; border-right:1px solid {{ webColor }}; border-bottom:1px solid {{ webColor }}; transition:border-color 0.25s ease;"></div>
+        <div style="margin-top:5px; text-align:center; font-family:'IBM Plex Mono',monospace; font-size:0.58rem; letter-spacing:0.22em; text-transform:uppercase; color:{{ webColor }}; transition:color 0.25s ease;">website</div>
+        <div onMouseEnter="{{ enterWeb }}" onMouseLeave="{{ leaveZone }}" style="position:absolute; top:100%; left:50%; transform:translateX(-50%); padding:4px 10px 10px; opacity:{{ switchOpacity }}; pointer-events:{{ switchPointer }}; transition:opacity 0.25s ease; white-space:nowrap; z-index:20;">
+          <div onMouseEnter="{{ enterCardSwitch }}" onMouseLeave="{{ leaveCardSwitch }}" style-hover="border-color:#8fb0ff; background:rgba(143,176,255,0.05); box-shadow:0 0 24px rgba(143,176,255,0.12);" style="transition:border-color 0.25s ease, background 0.25s ease, box-shadow 0.25s ease; display:flex; align-items:center; gap:0.5rem; border:1px solid rgba(136,160,220,0.22); background:#0a0f1b; padding:0.5rem 0.7rem;">
+            <span onClick="{{ openWdiyp }}" role="button" aria-label="Switch to WDIYP.com" style="position:relative; width:26px; height:13px; border:1px solid rgba(136,160,220,0.4); border-radius:999px; display:inline-block; cursor:pointer;">
+              <span style="position:absolute; top:2px; left:{{ cardKnobLeft }}; width:7px; height:7px; border-radius:50%; background:#8fb0ff; transition:left 0.25s ease;"></span>
+            </span>
+            <span style="font-family:'IBM Plex Mono',monospace; font-size:0.54rem; letter-spacing:0.18em; text-transform:uppercase; color:#8fb0ff; opacity:{{ cardLabelOpacity }}; transition:opacity 0.25s ease;">WDIYP.com</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- layer 3: email -->
+      <a href="mailto:D@DR1PD.com" onMouseEnter="{{ enterEmail }}" onMouseLeave="{{ leaveZone }}" style="grid-column:1/5; grid-row:4; padding-top:0.55rem; text-decoration:none; display:block;">
+        <div style="height:8px; border-left:1px solid {{ emailColor }}; border-right:1px solid {{ emailColor }}; border-bottom:1px solid {{ emailColor }}; transition:border-color 0.25s ease;"></div>
+        <div style="margin-top:5px; text-align:center; font-family:'IBM Plex Mono',monospace; font-size:0.58rem; letter-spacing:0.22em; text-transform:uppercase; color:{{ emailColor }}; transition:color 0.25s ease;">email</div>
+      </a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer style="border-top:1px solid rgba(136,160,220,0.10); padding:1.6rem clamp(1.25rem,4vw,3rem); display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:0.8rem;">
+    <span style="font-family:'Cormorant Garamond',serif; font-style:italic; font-size:0.9rem; color:#5c6885; font-variant-numeric:lining-nums;">© 2026 DR1PD</span>
+    <div style="display:flex; gap:0.6rem;">
+      <a href="https://www.linkedin.com/in/dr1pd/" target="_blank" rel="noopener" aria-label="LinkedIn" style="width:30px; height:30px; display:flex; align-items:center; justify-content:center; text-decoration:none;" style-hover="opacity:1;"><img src="/social-li-sq.png" alt="" style="width:24px; height:24px; opacity:0.7;"></a>
+      <a href="https://github.com/dr1pd" target="_blank" rel="noopener" aria-label="GitHub" style="width:30px; height:30px; display:flex; align-items:center; justify-content:center; text-decoration:none;" style-hover="opacity:1;"><img src="/social-gh-sq.png" alt="" style="width:24px; height:24px; opacity:0.7;"></a>
+    </div>
+  </footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;heroMedia&quot;: {&quot;editor&quot;: &quot;enum&quot;, &quot;options&quot;: [&quot;video&quot;, &quot;clean&quot;], &quot;default&quot;: &quot;video&quot;, &quot;tsType&quot;: &quot;string&quot;, &quot;section&quot;: &quot;Hero&quot;}, &quot;visitedFraction&quot;: {&quot;editor&quot;: &quot;text&quot;, &quot;default&quot;: &quot;26 / 197&quot;, &quot;tsType&quot;: &quot;string&quot;, &quot;section&quot;: &quot;World&quot;}, &quot;bucketFraction&quot;: {&quot;editor&quot;: &quot;text&quot;, &quot;default&quot;: &quot;1 / 100&quot;, &quot;tsType&quot;: &quot;string&quot;, &quot;section&quot;: &quot;World&quot;}}">
+class Component extends DCLogic {
+  state = { zone: null, site: "a", navHover: false, achIdx: 0, achVisible: true, brollOk: false, introTyped: "", introFade: false, introGlow: false, introFrozen: false, introShowing: !sessionStorage.getItem("dr1pd_intro_played") };
+
+  renderVals() {
+    const media = this.props.heroMedia ?? "video";
+    const z = this.state.zone;
+    const dim = "rgba(136,160,220,0.30)";
+    const lit = "#8fb0ff";
+    const textDim = "#e9edf7";
+    const zoneColor = (name) => (z === name ? lit : dim);
+    const tokColor = (names) => (names.includes(z) ? lit : textDim);
+    const ach = [
+      { t: "TEDˣ Speaker", s: "The University of Oklahoma · 2026" },
+      { t: "Hackathon Winner", s: "Hook 'em Hacks · 2026" },
+      { t: "National Finalist", s: "IISE Capstone Competition · 2025" },
+      { t: "RA of the Year", s: "The University of Oklahoma · 2024" },
+      { t: "Campus Life Award", s: "The University of Oklahoma · 2025" },
+      { t: "Eng. Leadership Certificate", s: "Jerry Holmes Leadership Program · 2023" },
+      { t: "PLC 61", s: "The University of Oklahoma · 2021" },
+      { t: "Climbed Mt. Fuji", s: "Shizuoka, Japan · 2015" },
+      { t: "VC Case Winner", s: "Devon Innovation Challenge · 2024" },
+      { t: "Administrator", s: "OU Love Letters · 2022" },
+      { t: "Taiko Honor Medal", s: "Yamato, Japan · 2014" },
+      { t: "Fan Favorite", s: "OU Film Series Festival · 2023" },
+    ];
+    const a = ach[this.state.achIdx % ach.length];
+    return {
+      videoMode: media === "video" && this.state.brollOk,
+      introShowing: this.state.introShowing,
+      introOpacity: this.state.introFade ? 0 : 1,
+      introTyped: this.state.introTyped,
+      introPlay: this.state.introFrozen ? "paused" : "running",
+      introGlowShadow: this.state.introGlow
+        ? "0 0 18px rgba(255,255,255,0.85), 0 0 60px rgba(143,176,255,0.9), 0 0 120px rgba(95,125,255,0.6)"
+        : "none",
+      visitedFraction: this.props.visitedFraction ?? "26 / 197",
+      bucketFraction: this.props.bucketFraction ?? "1 / 100",
+      // achievements rotator
+      achTitle: a.t,
+      achSub: a.s,
+      achOpacity: this.state.achVisible ? 1 : 0,
+      // nav switch
+      navKnobLeft: this.state.navHover ? "15px" : "2px",
+      heroBaseClip: this.state.navHover ? "inset(0 0 0 100%)" : "inset(0 0 0 0)",
+      heroAltClip: this.state.navHover ? "inset(0 0 0 0)" : "inset(0 100% 0 0)",
+      navLabelOpacity: this.state.navHover ? 1 : 0,
+      quantEnterSize: this.state.quantCardHover ? "100% 1px" : "0% 1px",
+      coffeeEnterSize: this.state.coffeeHover ? "100% 1px" : "0% 1px",
+      coffeeColor: this.state.coffeeHover ? "#8fb0ff" : "#e9edf7",
+      enterCoffee: () => this.setState({ coffeeHover: true }),
+      leaveCoffee: () => this.setState({ coffeeHover: false }),
+      createEnterSize: this.state.createCardHover ? "100% 1px" : "0% 1px",
+      enterQuantCard: () => this.setState({ quantCardHover: true }),
+      leaveQuantCard: () => this.setState({ quantCardHover: false }),
+      enterCreateCard: () => this.setState({ createCardHover: true }),
+      leaveCreateCard: () => this.setState({ createCardHover: false }),
+      enterNavSwitch: () => this.setState({ navHover: true }),
+      leaveNavSwitch: () => this.setState({ navHover: false }),
+      // card switch (bottom contact card) — same behavior as nav switch
+      cardKnobLeft: this.state.cardSwitchHover ? "15px" : "2px",
+      cardLabelOpacity: this.state.cardSwitchHover ? 1 : 0,
+      cardSwitchHover: this.state.cardSwitchHover,
+      enterCardSwitch: () => this.setState({ cardSwitchHover: true }),
+      leaveCardSwitch: () => this.setState({ cardSwitchHover: false }),
+      openWdiyp: () => window.open("https://wdiyp.com", "_blank"),
+      // bucket list modal
+      bucketOpen: !!this.state.bucketOpen,
+      openBucket: () => this.setState({ bucketOpen: true }, () => setTimeout(() => this.startOrb("bucketGlobe", 9), 50)),
+      closeBucket: () => this.setState({ bucketOpen: false }),
+      stopClick: (e) => e.stopPropagation(),
+      // achievements wall
+      achOpen: !!this.state.achOpen,
+      openAchievements: () => this.setState({ achOpen: true }),
+      closeAchievements: () => this.setState({ achOpen: false }),
+      achCount: String(ach.length),
+      achWall: ach.map((x) => {
+        const wallLinks = {
+          "TEDˣ Speaker": "https://www.youtube.com/watch?v=cVY9Oamri5s",
+          "Hackathon Winner": "https://devpost.com/software/signaltracer-powered-by-bloom",
+          "National Finalist": "https://www.iise.org/Details.aspx?id=47546",
+          "Campus Life Award": "https://www.ou.edu/content/dam/studentaffairs/campus-awards/documents/Campus%20Awards%20Ad%202025.pdf",
+          "Eng. Leadership Certificate": "https://www.ou.edu/coe/student-life/leadership",
+          "PLC 61": "https://www.ou.edu/plc",
+          "Administrator": "https://www.oudaily.com/news/ou-love-letters-owner-identity-reveal-community-anonymous-submissions/article_1da53f13-abbf-4f4f-a287-7dec48ac6ca5.html",
+          "VC Case Winner": "https://www.linkedin.com/posts/oustartups_congratulations-to-the-winners-of-our-first-ever-activity-7179571092620017665-wPiG?utm_source=share&utm_medium=member_desktop&rcm=ACoAADkalCUBjVmVQHyK-5XPPJFMaIVBmJ8qm40",
+        };
+        const href = wallLinks[x.t];
+        return { ...x, icon: x.icon ?? "◆", href, cursor: href ? "pointer" : "default", onClick: href ? undefined : (e) => e.preventDefault() };
+      }),
+      // countries modal
+      countriesOpen: !!this.state.countriesOpen,
+      openCountries: () => this.setState({ countriesOpen: true }),
+      closeCountries: () => this.setState({ countriesOpen: false }),
+      countryCells: ["Austria","Belgium","Belize","Cambodia","China","Colombia","Denmark","El Salvador","France","Germany","Guatemala","Indonesia","Italy","Japan","Luxembourg","Malaysia","Mexico","Netherlands","Panama","Singapore","Spain","Taiwan","Thailand","United States","Vatican City","Vietnam"].map((name, i) => ({ n: i + 1, name })),
+      goalCells: ['Complete "?groundzero?"',"Create a full portfolio website","Earn 3 master's degrees","Save someone's life","Speak 5 languages","Make 6 figures side-hustling","See all 7 wonders of the world","Break into Quantitative Finance","Break into modeling","Finish the film decalogy","Do a 1:1 activity with a celebrity","Live a month in silence & solitude","Live in a big-city studio apartment","Build Minecraft kingdom","Build an original algorithm","Build your dream physique","Surpass a 1700 Chess ELO","Own 1 Bitcoin","Own real estate","Become a multi-millionaire","Learn to DJ","Learn to play guitar","Learn to skateboard","Learn to ride a horse","Learn to do a backflip","Learn to defend yourself","Learn to ride a motorcycle","Read 1000 books","Read the dictionary","Read all religious texts","Earn a recognized prize","Earn your PhD & publish research","Publish your biography & philosophy","Own your entire wishlist","Cold plunge in Antarctica","Swim on a Paris rooftop","Wander New York City","Attain a perfect credit score","Attain a Class 3 Firearms License","Start the YouTube series",'Launch "World is your Playground"',"Hold a tarantula","Enter a cage fight & win","Play Russian Roulette once","Record a video time capsule","Skydive","Refine Instagram profile","Get licensed & sail the ocean","Get licensed & fly the country","Travel to all 50 states","Travel to every continent","Travel to every country world-wide","Fly somewhere new the next day","Backpack an entire country on foot","Have citizenship in another country","Gamble at Casino de Monte-Carlo","Optimize your ideal camera setup","Stay awake for 100 hours straight","Improve your swimming",'Find your "tribe"',"Find your staple-piece artifact/art","Successfully complete a full IRONMAN","Solve a Rubik's Cube","Spend thousands on a photoshoot","Work an assistantship abroad","Build for a community abroad","Go bow hunting","Go ghost hunting","Get into Berghain","Get good at a sport","Get featured on a magazine","Get coffee with 1000 people","Get cast as an extra in a movie","Become a knight in shining armor","Direct a film that screens at a festival","Perform standup comedy","Speak at a TED/TEDˣ conference","Speak at an academic conference","Hire a stylist, nutritionist & designer","Break a Guinness World Record","Jet-ski in Miami","Plant a giant tree","Rent a billboard","Rent a mansion with friends","See the Northern Lights","Curate an art exhibition","Exceed your father's annual salary","Attend Coachella","Attend the Olympics","Attend Fashion Week","Produce an original album","Stand on a moving train","Stand on monkey business","Commission a personal portrait","Master a dish to perfection","Survive the Running of the Bulls","Launch/scale entrepreneurial venture","Throw a champagne yacht party","Host a commemorative dinner","Leave behind a legacy"].map((label, i) => {
+        const n = i + 1;
+        const done = n === 77;
+        return done
+          ? { n, label, numColor: "#8fb0ff", textColor: "#e9edf7", bg: "rgba(143,176,255,0.12)", textDisplay: "block", lockDisplay: "none" }
+          : { n, label: "", numColor: "rgba(92,104,133,0.75)", textColor: "#93a0bf", bg: "transparent", textDisplay: "none", lockDisplay: "flex" };
+      }),
+      // card labels / brackets
+      meColor: zoneColor("me"),
+      webColor: zoneColor("web"),
+      handleLineColor: zoneColor("handle"),
+      emailColor: zoneColor("email"),
+      dColor: tokColor(["me", "email"]),
+      handleColor: tokColor(["handle", "email"]),
+      handleColor2: tokColor(["handle", "web", "email"]),
+      comColor: tokColor(["web", "email"]),
+      socialOpacity: z === "handle" ? 1 : 0,
+      socialPointer: z === "handle" ? "auto" : "none",
+      switchOpacity: z === "web" ? 1 : 0,
+      switchPointer: z === "web" ? "auto" : "none",
+      knobLeft: this.state.site === "a" ? "2px" : "17px",
+      siteAColor: this.state.site === "a" ? "#e9edf7" : "#5c6885",
+      siteBColor: this.state.site === "b" ? "#e9edf7" : "#5c6885",
+      toggleSite: () => this.setState(s => ({ site: s.site === "a" ? "b" : "a" })),
+      enterMe: () => this.setZone("me"),
+      enterWeb: () => this.setZone("web"),
+      enterHandle: () => this.setZone("handle"),
+      enterEmail: () => {
+        // don't instantly steal the zone while the website switch is open
+        if (this.state.zone === "web" || this.state.zone === "handle") {
+          clearTimeout(this._zoneT);
+          this._zoneT = setTimeout(() => this.setState({ zone: "email" }), 300);
+        } else {
+          this.setZone("email");
+        }
+      },
+      leaveZone: () => {
+        clearTimeout(this._zoneT);
+        this._zoneT = setTimeout(() => this.setState({ zone: null }), 350);
+      },
+    };
+  }
+
+  setZone(z) {
+    clearTimeout(this._zoneT);
+    this.setState({ zone: z });
+  }
+
+  componentDidMount() {
+    // Intro: type DR1PD on black, pause, fade to the site. Plays once per visit.
+    const reducedIntro = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reducedIntro || !this.state.introShowing) {
+      this.setState({ introShowing: false });
+    } else {
+      sessionStorage.setItem("dr1pd_intro_played", "1");
+      const word = "DR1PD";
+      let i = 0;
+      const typeNext = () => {
+        i++;
+        this.setState({ introTyped: word.slice(0, i) });
+        if (i < word.length) setTimeout(typeNext, 170);
+        else {
+          setTimeout(() => this.setState({ introGlow: true }), 400);   // brighten
+          setTimeout(() => this.setState({ introFrozen: true }), 1050); // freeze the motion
+          setTimeout(() => this.setState({ introFade: true }), 1450);   // fade to site
+          setTimeout(() => this.setState({ introShowing: false }), 2400);
+        }
+      };
+      setTimeout(typeNext, 450);
+    }
+    // Probe for the b-roll file silently; only mount the <video> if it exists.
+    fetch("/broll.mp4", { method: "HEAD" })
+      .then(r => {
+        const ct = (r.headers.get("content-type") || "").toLowerCase();
+        if (r.ok && ct.startsWith("video")) this.setState({ brollOk: true });
+      })
+      .catch(() => {});
+    this.startOrb("globeOrb");
+    this.startOrb("introGlobe", 9, true);
+    this.startGlobe();
+    const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (!reduced) {
+      this._achTimer = setInterval(() => {
+        this.setState({ achVisible: false });
+        setTimeout(() => this.setState(s => ({ achIdx: s.achIdx + 1, achVisible: true })), 480);
+      }, 3800);
+    }
+  }
+
+  componentWillUnmount() {
+    if (this._achTimer) clearInterval(this._achTimer);
+  }
+
+  startGlobe() {
+    const canvas = document.getElementById("globe");
+    if (!canvas || canvas.dataset.running) return;
+    canvas.dataset.running = "1";
+    const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const boot = () => {
+      if (!window.d3 || !window.topojson) { setTimeout(boot, 200); return; }
+      const d3 = window.d3;
+      const W = canvas.width, H = canvas.height;
+      const ctx = canvas.getContext("2d");
+      const R = W / 2 - 20;
+      const projection = d3.geoOrthographic().scale(R).translate([W / 2, H / 2]).clipAngle(90);
+      const path = d3.geoPath(projection, ctx);
+      const graticule = d3.geoGraticule10();
+      let land = null;
+      let rot = [-40, -18];
+      let dragging = false;
+
+      // Visited countries — 26/197
+      const visited = [
+        [-98.5, 39.8],  // United States
+        [-102.5, 23.6], // Mexico
+        [-88.5, 17.2],  // Belize
+        [-90.2, 15.8],  // Guatemala
+        [-88.9, 13.8],  // El Salvador
+        [-80.8, 8.5],   // Panama
+        [-74, 4.6],     // Colombia
+        [-3.7, 40.4],   // Spain
+        [2.2, 46.6],    // France
+        [4.5, 50.8],    // Belgium
+        [6.1, 49.8],    // Luxembourg
+        [5.3, 52.1],    // Netherlands
+        [10.4, 51.1],   // Germany
+        [10, 56],       // Denmark
+        [14.5, 47.5],   // Austria
+        [12.6, 42.8],   // Italy
+        [12.45, 41.9],  // Vatican City
+        [104, 35],      // China
+        [121, 23.7],    // Taiwan
+        [138.2, 36.2],  // Japan
+        [108.2, 14.1],  // Vietnam
+        [105, 12.5],    // Cambodia
+        [100.9, 15.8],  // Thailand
+        [101.9, 4.2],   // Malaysia
+        [103.8, 1.35],  // Singapore
+        [113.9, -0.8],  // Indonesia
+      ];
+
+      fetch("https://cdn.jsdelivr.net/npm/world-atlas@2/land-110m.json")
+        .then(r => r.json())
+        .then(world => { land = window.topojson.feature(world, world.objects.land); })
+        .catch(() => {});
+
+      let t = 0;
+      const render = () => {
+        t += 0.016;
+        ctx.clearRect(0, 0, W, H);
+        projection.rotate(rot);
+        ctx.beginPath(); path({ type: "Sphere" });
+        ctx.fillStyle = "#070c17"; ctx.fill();
+        ctx.strokeStyle = "rgba(136,160,220,0.22)"; ctx.lineWidth = 1; ctx.stroke();
+        ctx.beginPath(); path(graticule);
+        ctx.strokeStyle = "rgba(136,160,220,0.07)"; ctx.lineWidth = 1; ctx.stroke();
+        if (land) {
+          ctx.beginPath(); path(land);
+          ctx.fillStyle = "#101a30"; ctx.fill();
+          ctx.strokeStyle = "rgba(143,176,255,0.30)"; ctx.lineWidth = 1; ctx.stroke();
+        }
+        // glowing visited dots
+        const center = [-rot[0], -rot[1]];
+        for (let i = 0; i < visited.length; i++) {
+          const pt = visited[i];
+          if (d3.geoDistance(pt, center) > 1.5) continue;
+          const [x, y] = projection(pt);
+          const pulse = 0.75 + 0.25 * Math.sin(t * 2 + i * 1.7);
+          ctx.save();
+          ctx.shadowColor = "rgba(255,255,255,0.9)";
+          ctx.shadowBlur = 14 * pulse;
+          ctx.beginPath();
+          ctx.arc(x, y, 4.2, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(255,255,255,${0.7 + 0.3 * pulse})`;
+          ctx.fill();
+          ctx.restore();
+        }
+      };
+
+      const frame = () => {
+        if (!dragging && !reduced) rot[0] += 0.06;
+        render();
+        if (document.getElementById("globe") === canvas) requestAnimationFrame(frame);
+      };
+
+      let last = null;
+      canvas.addEventListener("pointerdown", e => { dragging = true; last = [e.clientX, e.clientY]; canvas.setPointerCapture(e.pointerId); });
+      canvas.addEventListener("pointermove", e => {
+        if (!dragging) return;
+        const scale = W / canvas.clientWidth;
+        rot[0] += (e.clientX - last[0]) * scale * 0.12;
+        rot[1] = Math.max(-60, Math.min(60, rot[1] - (e.clientY - last[1]) * scale * 0.12));
+        last = [e.clientX, e.clientY];
+      });
+      const end = () => { dragging = false; };
+      canvas.addEventListener("pointerup", end);
+      canvas.addEventListener("pointercancel", end);
+
+      frame();
+    };
+    boot();
+  }
+
+  startOrb(id, speed = 1, freezeWithIntro = false) {
+    const canvas = document.getElementById(id);
+    if (!canvas || canvas.dataset.running) return;
+    canvas.dataset.running = "1";
+    const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const ctx = canvas.getContext("2d");
+    const W = canvas.width, H = canvas.height, CX = W / 2, CY = H / 2, R = W * 0.4;
+
+    const DOTS = [];
+    const RINGS = 26, COUNT = 900;
+    for (let ring = 0; ring < RINGS; ring++) {
+      const phi = (Math.PI / (RINGS + 1)) * (ring + 1);
+      const rr = Math.sin(phi);
+      const n = Math.max(4, Math.round((COUNT / RINGS) * rr * 1.6));
+      for (let i = 0; i < n; i++) {
+        const theta = (Math.PI * 2 / n) * i + ring * 0.3;
+        DOTS.push({
+          phi, theta,
+          size: 0.8 + Math.random() * 1.2,
+          pp: Math.random() * Math.PI * 2,
+          os: 0.12 + Math.random() * 0.2,
+          oa: 0.004 + Math.random() * 0.01,
+        });
+      }
+    }
+
+    const rY = (x, y, z, a) => { const c = Math.cos(a), s = Math.sin(a); return [x * c + z * s, y, -x * s + z * c]; };
+    const rX = (x, y, z, a) => { const c = Math.cos(a), s = Math.sin(a); return [x, y * c - z * s, y * s + z * c]; };
+
+    let t = 0;
+    const frame = () => {
+      if (freezeWithIntro && this.state.introFrozen) return;
+      t += 0.016;
+      ctx.clearRect(0, 0, W, H);
+
+      const rotY = t * 0.1 * speed, rotX = Math.sin(t * 0.07) * 0.25 + 0.42;
+      const proj = [];
+
+      for (const d of DOTS) {
+        const th = d.theta + Math.sin(t * d.os + d.pp) * d.oa;
+        const ph = d.phi + Math.cos(t * d.os * 0.7 + d.pp) * d.oa * 0.5;
+        let x = Math.sin(ph) * Math.cos(th), y = Math.cos(ph), z = Math.sin(ph) * Math.sin(th);
+        [x, y, z] = rY(x, y, z, rotY);
+        [x, y, z] = rX(x, y, z, rotX);
+        const per = 1 + z * 0.28;
+        const breath = 0.92 + 0.08 * Math.sin(t * 0.9 + d.pp);
+        const small = W < 700;
+        proj.push({
+          sx: CX + x * R * per, sy: CY + y * R * per, z,
+          a: Math.min(small ? 0.85 : 0.5, ((small ? 0.12 : 0.05) + (z + 1) * (small ? 0.26 : 0.16)) * breath),
+          l: 60 + z * 14,
+          s: d.size * per * breath * (small ? 2.2 : 1),
+        });
+      }
+
+      proj.sort((a, b) => a.z - b.z);
+      for (const p of proj) {
+        ctx.beginPath();
+        ctx.arc(p.sx, p.sy, p.s, 0, Math.PI * 2);
+        ctx.fillStyle = `hsla(224, 55%, ${p.l}%, ${p.a})`;
+        ctx.fill();
+      }
+
+      if (!reduced && document.getElementById(id) === canvas) requestAnimationFrame(frame);
+    };
+    frame();
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="/support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,400&amp;family=IBM+Plex+Mono:wght@300;400&amp;family=Public+Sans:wght@300;400;500&amp;display=swap" rel="stylesheet">
+<style>
+  html, body { margin: 0; padding: 0; background: #05070d; }
+  body {
+    -webkit-font-smoothing: antialiased;
+    cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='22' height='22' viewBox='0 0 22 22'><circle cx='11' cy='11' r='9' fill='none' stroke='%23aebfe8' stroke-width='1.2'/><ellipse cx='11' cy='11' rx='4' ry='9' fill='none' stroke='%23aebfe8' stroke-width='0.8'/><path d='M2.6 8 h16.8 M2.6 14 h16.8' stroke='%23aebfe8' stroke-width='0.8' fill='none'/></svg>") 11 11, auto;
+  }
+  a, button, [role="button"] {
+    cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='22' height='22' viewBox='0 0 22 22'><circle cx='11' cy='11' r='9' fill='none' stroke='%238fb0ff' stroke-width='1.4'/><ellipse cx='11' cy='11' rx='4' ry='9' fill='none' stroke='%238fb0ff' stroke-width='0.9'/><path d='M2.6 8 h16.8 M2.6 14 h16.8' stroke='%238fb0ff' stroke-width='0.9' fill='none'/></svg>") 11 11, pointer;
+  }
+  ::selection { background: rgba(143,176,255,0.28); }
+  a { color: #e9edf7; }
+  a:hover { color: #8fb0ff; }
+  @keyframes ambientA { 0% { transform: translate(-12vw,-8vh) scale(1); opacity: 0.14; } 25% { transform: translate(6vw,14vh) scale(1.2); opacity: 0.21; } 50% { transform: translate(16vw,-4vh) scale(1.3); opacity: 0.17; } 75% { transform: translate(-4vw,10vh) scale(1.1); opacity: 0.22; } 100% { transform: translate(-12vw,-8vh) scale(1); opacity: 0.14; } }
+  @keyframes ambientB { 0% { transform: translate(10vw,12vh) scale(1.15); opacity: 0.18; } 30% { transform: translate(-8vw,-6vh) scale(0.95); opacity: 0.12; } 60% { transform: translate(-14vw,8vh) scale(1.25); opacity: 0.19; } 100% { transform: translate(10vw,12vh) scale(1.15); opacity: 0.18; } }
+
+  /* ---- responsive: phones/tablets only (desktop untouched) ---- */
+  @media (max-width: 840px) {
+    [data-mq="split"] { grid-template-columns: 1fr !important; }
+    [data-mq="split"] > a { border-right: none !important; padding-left: 0 !important; padding-right: 0 !important; }
+    [data-mq="stats"] { display: flex !important; flex-wrap: wrap !important; justify-content: center !important; gap: 0.7rem 2rem !important; }
+    [data-mq="world"] { grid-template-columns: 1fr !important; }
+    [data-mq="proj"] { grid-template-columns: 1fr !important; gap: 1.1rem !important; }
+    [data-mq="proj"] > div:first-child { max-width: 420px; }
+    [data-mq="films"] { grid-template-columns: repeat(2, 1fr) !important; }
+    [data-mq="resume-body"] { grid-template-columns: 1fr !important; }
+    [data-mq="hero-row"] { flex-wrap: wrap !important; gap: 1.2rem !important; }
+  }
+  /* ---- large TVs: gently scale everything up ---- */
+  @media (min-width: 2200px) { html { font-size: 19px; } }
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+</helmet>
+
+<div style="min-height:100vh; background:#05070d; color:#e9edf7; font-family:'Public Sans',system-ui,sans-serif; font-weight:300; line-height:1.65;">
+
+  <!-- ambient drifting glow -->
+  <div aria-hidden="true" style="position:fixed; inset:0; z-index:0; pointer-events:none; overflow:hidden;">
+    <span style="position:absolute; top:8%; left:18%; width:55vw; height:55vw; background:radial-gradient(circle at center, rgba(110,140,255,0.5), transparent 65%); filter:blur(70px); animation:ambientA 52s ease-in-out infinite;"></span>
+    <span style="position:absolute; bottom:5%; right:12%; width:48vw; height:48vw; background:radial-gradient(circle at center, rgba(140,110,255,0.4), transparent 65%); filter:blur(70px); animation:ambientB 64s ease-in-out infinite;"></span>
+  </div>
+
+  <!-- Nav -->
+  <header style="position:fixed; top:0; left:0; right:0; z-index:100; display:flex; align-items:center; justify-content:space-between; padding:1.1rem clamp(1.25rem,4vw,3rem); background:rgba(5,7,13,0.72); backdrop-filter:blur(12px); border-bottom:1px solid rgba(136,160,220,0.10);">
+    <a href="/" style="font-family:'Cormorant Garamond',serif; font-size:1.2rem; font-weight:500; letter-spacing:0.18em; text-decoration:none; color:#e9edf7; font-variant-numeric:lining-nums;">DR1PD</a>
+    <nav style="display:flex; gap:2rem; align-items:center;">
+      <a href="/q/" style="font-family:'IBM Plex Mono',monospace; font-size:0.66rem; letter-spacing:0.18em; text-transform:uppercase; color:#e9edf7; text-decoration:none; border-bottom:1px solid #8fb0ff; padding-bottom:2px;">Quant</a>
+      <a href="/c/" style="font-family:'IBM Plex Mono',monospace; font-size:0.66rem; letter-spacing:0.18em; text-transform:uppercase; color:#93a0bf; text-decoration:none;" style-hover="color:#e9edf7;">Create</a>
+      <a href="/r/" style="font-family:'IBM Plex Mono',monospace; font-size:0.66rem; letter-spacing:0.18em; text-transform:uppercase; color:#e9edf7; text-decoration:none; border:1px solid rgba(136,160,220,0.28); border-radius:2px; padding:0.45rem 1rem;" style-hover="border-color:#8fb0ff; color:#8fb0ff;">Résumé</a>
+    </nav>
+  </header>
+
+  <!-- Hero -->
+  <section data-screen-label="Quant hero" style="padding:9rem clamp(1.25rem,4vw,3rem) 3.5rem;">
+    <div style="max-width:1020px; margin:0 auto;">
+      <span style="font-family:'IBM Plex Mono',monospace; font-size:0.62rem; letter-spacing:0.3em; text-transform:uppercase; color:#5c6885;">Systems · Markets · Models</span>
+      <h1 style="margin:0.8rem 0 1rem; font-family:'Cormorant Garamond',serif; font-weight:400; font-size:clamp(3rem,7vw,4.8rem); line-height:1; color:#e9edf7;">Quant</h1>
+      <p style="margin:0; max-width:34rem; color:#93a0bf; font-size:0.95rem;">Engineering and econometrics across machine learning, optimization, and markets. The full record — featured on <a href="/r/" style="color:#8fb0ff; text-decoration:none; border-bottom:1px solid rgba(143,176,255,0.4);">résumé</a>.</p>
+    </div>
+  </section>
+
+  <!-- Projects -->
+  <section data-screen-label="Projects" style="padding:1rem clamp(1.25rem,4vw,3rem) 6rem;">
+    <div style="max-width:1020px; margin:0 auto;">
+      <div data-mq="hero-row" style="display:flex; align-items:flex-end; justify-content:space-between; gap:1rem; margin-bottom:2rem;">
+        <div>
+          <span style="display:block; font-family:'IBM Plex Mono',monospace; font-size:0.62rem; letter-spacing:0.3em; text-transform:uppercase; color:#5c6885; margin-bottom:0.5rem;">Research &amp; builds</span>
+          <h2 style="margin:0; font-family:'Cormorant Garamond',serif; font-weight:400; font-size:clamp(1.9rem,4vw,2.6rem); line-height:1.1; color:#e9edf7;">Projects</h2>
+        </div>
+        <a href="https://github.com/dr1pd" target="_blank" rel="noopener" style="font-family:'IBM Plex Mono',monospace; font-size:0.64rem; letter-spacing:0.2em; text-transform:uppercase; color:#8fb0ff; text-decoration:none; border:1px solid rgba(136,160,220,0.28); border-radius:2px; padding:0.5rem 1rem; white-space:nowrap;" style-hover="border-color:#8fb0ff;">Repo →</a>
+      </div>
+
+      <div style="display:flex; flex-direction:column; gap:3.2rem;">
+        <sc-for list="{{ projects }}" as="p" hint-placeholder-count="6">
+          <div data-reveal="true" data-mq="proj" onMouseEnter="{{ p.onEnter }}" onMouseLeave="{{ leave }}" style="display:grid; grid-template-columns:300px 1fr 140px; gap:2rem; align-items:start;">
+            <!-- thumbnail: default line art, hover reveals dropped image/gif -->
+            <div style="position:relative; aspect-ratio:16/10; border:1px solid rgba(136,160,220,0.15); overflow:hidden; transition:border-color 0.25s ease, background 0.25s ease, box-shadow 0.25s ease;" style-hover="border-color:#8fb0ff; box-shadow:0 0 24px rgba(143,176,255,0.12);">
+              <x-import component-from-global-scope="image-slot" from="/image-slot.js" id="{{ p.slotId }}" shape="rect" placeholder="{{ p.slotHint }}" style="position:absolute; inset:0; width:100%; height:100%;" hint-size="300px,188px"></x-import>
+              <div style="position:absolute; inset:0; background:#0a0f1b; display:flex; align-items:center; justify-content:center; opacity:{{ p.artOpacity }}; transition:opacity 0.4s ease; pointer-events:none;">
+                <svg viewBox="0 0 300 188" style="width:100%; height:100%;" aria-hidden="true">
+                  <path d="{{ p.art }}" fill="none" stroke="#8fb0ff" stroke-width="1.4" opacity="0.85"></path>
+                </svg>
+              </div>
+            </div>
+            <!-- text -->
+            <div>
+              <span style="display:block; font-family:'IBM Plex Mono',monospace; font-size:0.62rem; color:#5c6885; margin-bottom:0.4rem;">{{ p.num }}</span>
+              <h3 style="margin:0; font-family:'Cormorant Garamond',serif; font-weight:400; font-size:1.5rem; line-height:1.25; color:#e9edf7;">{{ p.title }}</h3>
+              <p style="margin:0.5rem 0 0; font-size:0.87rem; color:#93a0bf; max-width:32rem;">{{ p.desc }}</p>
+            </div>
+            <!-- skills on the side -->
+            <div style="display:flex; flex-direction:column; gap:0.4rem; padding-top:1.6rem;">
+              <sc-for list="{{ p.skills }}" as="s" hint-placeholder-count="3">
+                <span style="font-family:'IBM Plex Mono',monospace; font-size:0.56rem; letter-spacing:0.16em; text-transform:uppercase; color:#5c6885; text-align:right;">{{ s }}</span>
+              </sc-for>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+
+  <!-- More papers -->
+  <section data-screen-label="More papers" style="padding:0 clamp(1.25rem,4vw,3rem) 5rem;">
+    <div style="max-width:1020px; margin:0 auto;">
+      <div data-reveal="true"><div onClick="{{ openPapers }}" role="button" aria-label="Expand papers" style="border:1px solid rgba(136,160,220,0.15); padding:1.6rem 1.8rem; display:flex; align-items:center; justify-content:space-between; gap:1rem; cursor:pointer; transition:border-color 0.25s ease, background 0.25s ease, box-shadow 0.25s ease;" style-hover="border-color:#8fb0ff; background:rgba(143,176,255,0.05); box-shadow:0 0 24px rgba(143,176,255,0.12);">
+        <div>
+          <span style="font-family:'Cormorant Garamond',serif; font-size:1.5rem; color:#e9edf7;">More papers</span>
+        </div>
+        <span style="font-family:'IBM Plex Mono',monospace; font-size:0.64rem; letter-spacing:0.2em; text-transform:uppercase; color:#8fb0ff;">Open →</span>
+      </div></div>
+    </div>
+  </section>
+
+  <!-- Papers window -->
+  <sc-if value="{{ papersOpen }}" hint-placeholder-val="{{ false }}">
+    <div data-screen-label="Papers window" onClick="{{ closePapers }}" style="position:fixed; inset:0; z-index:200; background:rgba(5,7,13,0.88); backdrop-filter:blur(6px); display:flex; align-items:center; justify-content:center; padding:clamp(1rem,3vw,2.5rem);">
+      <div onClick="{{ stopClick }}" style="position:relative; width:min(1100px,100%); box-sizing:border-box; max-height:92vh; overflow:auto; background:#05070d; border:1px solid rgba(136,160,220,0.25); padding:clamp(1.2rem,3vw,2.2rem);">
+        <span onClick="{{ closePapers }}" role="button" aria-label="Close" style="position:absolute; top:0.55rem; right:0.7rem; font-family:'IBM Plex Mono',monospace; font-size:0.9rem; color:#5c6885; cursor:pointer; padding:0.2rem 0.4rem; transition:color 0.2s ease;" style-hover="color:#e9edf7;">✕</span>
+        <span style="position:absolute; top:0.92rem; left:0.7rem; padding:0.2rem 0.4rem; line-height:0.9rem; font-family:'IBM Plex Mono',monospace; font-size:0.62rem; letter-spacing:0.3em; text-transform:uppercase; color:#5c6885;">Papers</span>
+        <div style="height:1.6rem;"></div>
+        <div style="display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:1.1rem;">
+          <sc-for list="{{ papers }}" as="paper" hint-placeholder-count="4">
+            <div style="display:flex; flex-direction:column; gap:0.55rem; min-width:0;">
+              <div onClick="{{ paper.open }}" onMouseEnter="{{ paper.enter }}" onMouseLeave="{{ paper.leave }}" role="button" aria-label="Read paper" style="position:relative; aspect-ratio:1/1.4142; border:1px solid {{ paper.tileBorder }}; box-shadow:{{ paper.tileShadow }}; background:#0a0f1b; overflow:hidden; cursor:pointer; transition:border-color 0.25s ease, box-shadow 0.25s ease;">
+                <img id="thumb-{{ paper.pdf }}" aria-hidden="true" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" alt="" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:top center; background:#fff; display:{{ paper.imgDisplay }};">
+                <div style="position:absolute; inset:0; display:{{ paper.phDisplay }}; flex-direction:column; align-items:center; justify-content:center; gap:0.6rem; padding:1rem; box-sizing:border-box; text-align:center;">
+                  <span style="font-family:'IBM Plex Mono',monospace; font-size:0.55rem; color:#5c6885;">{{ paper.num }}</span>
+                  <svg width="20" height="26" viewBox="0 0 20 26" aria-hidden="true" style="opacity:0.5;"><path d="M2 1 h11 l5 5 v19 h-16 z M13 1 v5 h5" fill="none" stroke="#8fb0ff" stroke-width="1"></path><path d="M5.5 11 h9 M5.5 15 h9 M5.5 19 h6" stroke="rgba(136,160,220,0.5)" stroke-width="1"></path></svg>
+                  <span style="font-family:'IBM Plex Mono',monospace; font-size:0.56rem; letter-spacing:0.14em; text-transform:uppercase; color:#5c6885;">Coming soon</span>
+                </div>
+                <a href="{{ paper.dlHref }}" download="{{ paper.dlName }}" onClick="{{ paper.stopDl }}" aria-label="Download PDF" style="position:absolute; right:0.7rem; bottom:0.7rem; width:40px; height:40px; display:{{ paper.dlDisplay }}; align-items:center; justify-content:center; border:1px solid rgba(136,160,220,0.35); border-radius:50%; background:rgba(5,7,13,0.85); backdrop-filter:blur(6px); opacity:{{ paper.dlOpacity }}; transform:translateY({{ paper.dlShift }}); transition:opacity 0.3s ease, transform 0.3s ease, border-color 0.25s ease;" style-hover="border-color:#8fb0ff;">
+                  <svg width="15" height="15" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1.5 V10 M4.5 6.8 L8 10.3 L11.5 6.8 M2.5 13.5 h11" fill="none" stroke="#8fb0ff" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+                </a>
+              </div>
+              <div style="min-width:0;">
+                <p style="margin:0; display:{{ paper.titleDisplay }}; font-family:'Cormorant Garamond',serif; font-size:0.98rem; line-height:1.25; color:#e9edf7;">{{ paper.title }}</p>
+                <svg width="11" height="13" viewBox="0 0 9 11" aria-hidden="true" style="display:{{ paper.lockDisplay }}; margin-top:0.2rem; opacity:0.55;">
+                  <path d="M2.4 4.4 V2.9 a2.1 2.1 0 0 1 4.2 0 V4.4" fill="none" stroke="#8fb0ff" stroke-width="1"></path>
+                  <rect x="1" y="4.4" width="7" height="5.6" rx="1" fill="none" stroke="#8fb0ff" stroke-width="1"></rect>
+                </svg>
+                <p style="margin:0.2rem 0 0; display:{{ paper.subDisplay }}; font-family:'IBM Plex Mono',monospace; font-size:0.54rem; letter-spacing:0.12em; text-transform:uppercase; color:#5c6885;">{{ paper.sub }}</p>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <!-- Paper fullscreen viewer -->
+  <sc-if value="{{ paperFullSrc }}" hint-placeholder-val="{{ false }}">
+    <div onClick="{{ closePaperFull }}" style="position:fixed; inset:0; z-index:400; background:rgba(5,7,13,0.94); backdrop-filter:blur(8px); display:flex; align-items:flex-start; justify-content:center; overflow:auto; padding:2.5rem clamp(1rem,4vw,3rem);">
+      <div style="width:min(880px,100%);">{{ paperFullImg }}</div>
+      <span onClick="{{ closePaperFull }}" role="button" aria-label="Close" style="position:fixed; top:0.55rem; right:0.7rem; font-family:'IBM Plex Mono',monospace; font-size:0.9rem; color:#5c6885; cursor:pointer; padding:0.2rem 0.4rem; transition:color 0.2s ease;" style-hover="color:#e9edf7;">✕</span>
+    </div>
+  </sc-if>
+
+  <!-- Cross-link -->
+  <section data-screen-label="Cross-link" style="padding:2.5rem clamp(1.25rem,4vw,3rem) 3rem; text-align:center;">
+    <div style="display:flex; gap:2.5rem; justify-content:center;">
+      <a href="/r/" style="font-family:'IBM Plex Mono',monospace; font-size:0.7rem; letter-spacing:0.24em; text-transform:uppercase; color:#e9edf7; text-decoration:none; padding-bottom:5px; border-bottom:1px solid rgba(136,160,220,0.35);" style-hover="color:#8fb0ff; border-color:#8fb0ff;">Résumé</a>
+      <a href="/c/" style="font-family:'IBM Plex Mono',monospace; font-size:0.7rem; letter-spacing:0.24em; text-transform:uppercase; color:#e9edf7; text-decoration:none; padding-bottom:5px; border-bottom:1px solid rgba(136,160,220,0.35);" style-hover="color:#8fb0ff; border-color:#8fb0ff;">Create</a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer style="border-top:1px solid rgba(136,160,220,0.10); padding:1.6rem clamp(1.25rem,4vw,3rem); display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:0.8rem;">
+    <span style="font-family:'Cormorant Garamond',serif; font-style:italic; font-size:0.9rem; color:#5c6885; font-variant-numeric:lining-nums;">© 2026 DR1PD</span>
+    <div style="display:flex; gap:0.6rem;">
+      <a href="https://www.linkedin.com/in/dr1pd/" target="_blank" rel="noopener" aria-label="LinkedIn" style="width:30px; height:30px; display:flex; align-items:center; justify-content:center; text-decoration:none;" style-hover="opacity:1;"><img src="/social-li-sq.png" alt="" style="width:24px; height:24px; opacity:0.7;"></a>
+      <a href="https://github.com/dr1pd" target="_blank" rel="noopener" aria-label="GitHub" style="width:30px; height:30px; display:flex; align-items:center; justify-content:center; text-decoration:none;" style-hover="opacity:1;"><img src="/social-gh-sq.png" alt="" style="width:24px; height:24px; opacity:0.7;"></a>
+    </div>
+  </footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { hover: null, papersOpen: false, paperFullSrc: null };
+
+  componentDidMount() {
+    this.setupReveal();
+    // probe which paper thumbnails exist (paper-1.png … paper-8.png)
+    for (let i = 1; i <= 8; i++) {
+      const src = `paper-${i}.png`;
+      const img = new Image();
+      img.onload = () => this.setState(s => ({ paperLoaded: { ...(s.paperLoaded || {}), [src]: true } }));
+      img.src = src;
+    }
+    this.ensurePdfRender();
+  }
+
+  ensurePdfRender() {
+    if (this._pdfStarted) return;
+    const lib = window.pdfjsLib;
+    if (!lib) { setTimeout(() => this.ensurePdfRender(), 250); return; }
+    this._pdfStarted = true;
+    lib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+    const renderPage = (pdf, n) => pdf.getPage(n).then((page) => {
+      const vp = page.getViewport({ scale: 2 });
+      const c = document.createElement("canvas");
+      c.width = vp.width; c.height = vp.height;
+      const ctx = c.getContext("2d");
+      ctx.fillStyle = "#ffffff"; ctx.fillRect(0, 0, c.width, c.height);
+      return page.render({ canvasContext: ctx, viewport: vp }).promise.then(() => c.toDataURL("image/png"));
+    });
+    const pdfs = ["/paper-housing.pdf", "/paper-medicaid.pdf", "/paper-topsis.pdf", "/paper-ise-redesign.pdf", "/paper-ise-difficulty.pdf"];
+    pdfs.forEach((file) => {
+      lib.getDocument({
+        url: file,
+        standardFontDataUrl: "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/standard_fonts/",
+        cMapUrl: "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/cmaps/",
+        cMapPacked: true,
+      }).promise
+        .then((pdf) => {
+          const n = Math.min(pdf.numPages, 40);
+          let chain = Promise.resolve();
+          for (let i = 1; i <= n; i++) {
+            chain = chain.then(() => renderPage(pdf, i)).then((u) =>
+              this.setState((s) => {
+                const map = { ...(s.paperPdf || {}) };
+                map[file] = [...(map[file] || []), u];
+                return { paperPdf: map };
+              }));
+          }
+          return chain;
+        })
+        .catch((err) => console.warn("paper render failed:", file, err));
+    });
+  }
+
+  componentDidUpdate() {
+    this.ensurePdfRender();
+    const map = this.state.paperPdf || {};
+    for (const [file, urls] of Object.entries(map)) {
+      const el = document.getElementById("thumb-" + file);
+      if (el && urls && urls.length && el.src !== urls[0]) el.src = urls[0];
+    }
+    const loaded = this.state.paperLoaded || {};
+    for (const png of Object.keys(loaded)) {
+      const el = document.getElementById("thumb-" + png);
+      if (el && el.src !== png && !el.src.startsWith("data:image/png")) el.src = png;
+    }
+  }
+
+  setupReveal() {
+    const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const arm = () => {
+      const els = document.querySelectorAll('[data-reveal]:not([data-revealed])');
+      if (!els.length) return;
+      els.forEach(el => {
+        el.dataset.revealed = "armed";
+        if (reduced) return;
+        el.style.opacity = "0";
+        el.style.transform = "translateY(28px)";
+        el.style.transition = "opacity 0.9s ease, transform 0.9s ease";
+        this._revealObs.observe(el);
+      });
+    };
+    this._revealObs = new IntersectionObserver((entries) => {
+      this._ioLive = true;
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.style.opacity = "1";
+          e.target.style.transform = "translateY(0)";
+          this._revealObs.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.15, rootMargin: "0px 0px -6% 0px" });
+    arm();
+    let tries = 0;
+    this._revealT = setInterval(() => { arm(); if (++tries > 10) clearInterval(this._revealT); }, 300);
+    // fail-safe: if IntersectionObserver never fires (throttled/unavailable), force-reveal
+    this._revealSafety = setTimeout(() => {
+      if (this._ioLive) return; // observer is working — let scroll drive the reveals
+      document.querySelectorAll('[data-reveal][data-revealed]').forEach(el => {
+        el.style.opacity = "1"; el.style.transform = "translateY(0)";
+      });
+    }, 2000);
+  }
+
+  componentWillUnmount() {
+    if (this._revealObs) this._revealObs.disconnect();
+    if (this._revealT) clearInterval(this._revealT);
+    if (this._revealSafety) clearTimeout(this._revealSafety);
+  }
+
+  renderVals() {
+    const data = [
+      { num: "1", slotId: "proj-thesis", title: "Parameter-Free Losses for Imbalanced Classification", desc: "Defended M.S. thesis on loss-function design for severe class imbalance, applied to Medicare fraud detection. G-mean 0.87 without per-dataset tuning; journal manuscript in progress with Dr. Talayeh Razzaghi.", skills: ["Python", "PyTorch", "Imbalanced learning"], art: "M10,150 C50,140 70,80 110,88 C150,96 170,46 210,56 C250,66 270,36 290,30" },
+      { num: "2", slotId: "proj-cvar", title: "CVaR Portfolio Optimizer", desc: "Conditional value-at-risk portfolio construction with strict backtest hygiene — point-in-time data, no lookahead, survivorship-bias-aware universes.", skills: ["Convex optimization", "Backtesting"], art: "M10,160 C60,160 80,40 150,40 C220,40 240,160 290,160 M60,160 L60,128" },
+      { num: "3", slotId: "proj-rmt", title: "Eigenportfolios & RMT Covariance Cleaning", desc: "Random-matrix-theory filtering of sample covariance for more stable weights, with eigenportfolio decomposition of equity returns.", skills: ["Random matrix theory", "Linear algebra"], art: "M30,160 V110 M50,160 V90 M70,160 V104 M90,160 V120 M110,160 V128 M130,160 V134 M150,160 V138 M240,160 V44" },
+      { num: "4", slotId: "proj-hmm", title: "HMM Regime Detection", desc: "Hidden Markov models identifying market regimes from return and volatility series — a conditioning layer for allocation decisions.", skills: ["HMM", "Time series"], art: "M60,94 a34,34 0 1,0 68,0 a34,34 0 1,0 -68,0 M172,94 a34,34 0 1,0 68,0 a34,34 0 1,0 -68,0 M128,74 C150,58 172,58 186,72 M172,114 C150,130 128,130 114,116" },
+      { num: "5", slotId: "proj-signal", title: "SignalTracer", desc: "Signal-first quantitative research pipeline built with a team of four in a weekend. First place, AI/Financial track, Hook 'Em Hacks 2026.", skills: ["Python", "Pipelines", "Team of four"], art: "M10,94 H80 L100,54 L130,134 L160,74 L180,94 H290" },
+      { num: "6", slotId: "proj-warehouse", title: "Automated Warehouse Optimization", desc: "Discrete-event simulation and NPV analysis comparing manual and automated warehouse configurations to support a capital design decision.", skills: ["Simulation", "Gurobi", "NPV"], art: "M30,50 h50 v40 h-50 z M110,50 h50 v40 h-50 z M190,50 h50 v40 h-50 z M30,120 h50 v40 h-50 z M110,120 h50 v40 h-50 z M190,120 h50 v40 h-50 z M55,90 L55,120 M135,90 L135,120" },
+    ];
+    return {
+      projects: data.map((p, i) => ({
+        ...p,
+        slotHint: "Drop a capture / GIF",
+        artOpacity: this.state.hover === i ? 0 : 1,
+        onEnter: () => this.setState({ hover: i }),
+      })),
+      leave: () => this.setState({ hover: null }),
+      // papers window — drop paper-N.png (rendered page 1, resume style) next to the files to reveal a slot
+      papersOpen: !!this.state.papersOpen,
+      openPapers: () => this.setState({ papersOpen: true }),
+      closePapers: () => this.setState({ papersOpen: false }),
+      stopClick: (e) => e.stopPropagation(),
+      paperFullSrc: this.state.paperFullSrc,
+      paperFullImg: this.state.paperFullSrc
+        ? React.createElement("div", { style: { display: "flex", flexDirection: "column", gap: "1rem" } },
+            (Array.isArray(this.state.paperFullSrc) ? this.state.paperFullSrc : [this.state.paperFullSrc]).map((u, i) =>
+              React.createElement("img", { key: i, src: u, alt: "Paper page " + (i + 1), style: { display: "block", width: "100%", height: "auto", background: "#fff", boxShadow: "0 0 80px rgba(110,140,255,0.18)" } })))
+        : null,
+      closePaperFull: () => this.setState({ paperFullSrc: null }),
+      papers: [
+        { num: "1", title: "Ensemble & Regularized ML for Rent-Burden Prediction", sub: "Graduate research", pdf: "/paper-housing.pdf" },
+        { num: "2", title: "Causal Inference on Medicaid Expansion (D-i-D)", sub: "Graduate research", pdf: "/paper-medicaid.pdf" },
+        { num: "3", title: "Multi-Criteria Decision Modeling with TOPSIS–AHP", sub: "Undergraduate research", pdf: "/paper-topsis.pdf" },
+        { num: "4", title: "Cognitive Workload Modeling of Curriculum Design", sub: "Undergraduate research", pdf: "/paper-ise-redesign.pdf" },
+        { num: "5", title: "Monte Carlo Inference on Curriculum Workload", sub: "Undergraduate research", pdf: "/paper-ise-difficulty.pdf" },
+        { num: "6", title: "Parameter-Free Losses for Imbalanced Classification", sub: "M.S. thesis · 2026", thumb: "/paper-6.png" },
+        { num: "7", title: "CVaR Portfolio Optimization", sub: "Graduate research", thumb: "/paper-7.png" },
+        { num: "8", title: "Eigenportfolios & RMT Covariance Cleaning", sub: "Graduate research", thumb: "/paper-8.png" },
+      ].map((p) => {
+        const pdfPages = p.pdf ? (this.state.paperPdf || {})[p.pdf] : null;
+        const loaded = (pdfPages && pdfPages.length) || (this.state.paperLoaded || {})[p.thumb];
+        const fullSrc = pdfPages && pdfPages.length ? pdfPages : p.thumb;
+        const hasPdf = !!p.pdf;
+        const hovered = this.state.paperHover === p.num;
+        return {
+          ...p,
+          tileBorder: "rgba(136,160,220,0.15)",
+          tileShadow: hovered ? "0 0 24px rgba(143,176,255,0.12)" : "none",
+          titleDisplay: hasPdf ? "block" : "none",
+          subDisplay: hasPdf ? "block" : "none",
+          lockDisplay: hasPdf ? "none" : "block",
+          pdf: p.pdf ?? p.thumb,
+          imgDisplay: loaded ? "block" : "none",
+          phDisplay: loaded ? "none" : "flex",
+          open: () => { if (loaded) this.setState({ paperFullSrc: fullSrc }); },
+          enter: () => this.setState({ paperHover: p.num }),
+          leave: () => this.setState({ paperHover: null }),
+          dlHref: hasPdf ? p.pdf : "#",
+          dlName: hasPdf ? ({"/paper-housing.pdf":"Machine Learning Approaches to Housing Affordability Prediction in New York City.pdf","/paper-medicaid.pdf":"Medicaid Expansion and Cost-Related Barriers to Care for Low-Income Adults.pdf","/paper-topsis.pdf":"Evaluating University Selection Criteria and Applicant Decision-Making in College Admissions Using TOPSIS.pdf","/paper-ise-redesign.pdf":"Surveying the Merits of Redesigning the OU Industrial and Systems Engineering Degree.pdf","/paper-ise-difficulty.pdf":"Investigating Semester Difficulty of an Undergraduate Industrial and Systems Engineering Degree.pdf"})[p.pdf] : "",
+          dlDisplay: hasPdf ? "flex" : "none",
+          dlOpacity: hovered && hasPdf ? 1 : 0,
+          dlShift: hovered && hasPdf ? "0" : "6px",
+          stopDl: (e) => e.stopPropagation(),
+        };
+      }),
+    };
+  }
+}
+</script>
+</body>
+</html>

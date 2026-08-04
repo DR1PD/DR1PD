@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="/support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,400&amp;family=IBM+Plex+Mono:wght@300;400&amp;family=Public+Sans:wght@300;400;500&amp;display=swap" rel="stylesheet">
+<style>
+  html, body { margin: 0; padding: 0; background: #05070d; }
+  body {
+    -webkit-font-smoothing: antialiased;
+    cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='22' height='22' viewBox='0 0 22 22'><circle cx='11' cy='11' r='9' fill='none' stroke='%23aebfe8' stroke-width='1.2'/><ellipse cx='11' cy='11' rx='4' ry='9' fill='none' stroke='%23aebfe8' stroke-width='0.8'/><path d='M2.6 8 h16.8 M2.6 14 h16.8' stroke='%23aebfe8' stroke-width='0.8' fill='none'/></svg>") 11 11, auto;
+  }
+  a, button, [role="button"] {
+    cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='22' height='22' viewBox='0 0 22 22'><circle cx='11' cy='11' r='9' fill='none' stroke='%238fb0ff' stroke-width='1.4'/><ellipse cx='11' cy='11' rx='4' ry='9' fill='none' stroke='%238fb0ff' stroke-width='0.9'/><path d='M2.6 8 h16.8 M2.6 14 h16.8' stroke='%238fb0ff' stroke-width='0.9' fill='none'/></svg>") 11 11, pointer;
+  }
+  @keyframes glitchA {
+    0%, 100% { transform: translate(0,0); clip-path: inset(0 0 100% 0); opacity: 0; }
+    41% { transform: translate(0,0); clip-path: inset(0 0 100% 0); opacity: 0; }
+    42% { transform: translate(-3px,1px); clip-path: inset(24% 0 52% 0); opacity: 0.7; }
+    44% { transform: translate(0,0); clip-path: inset(0 0 100% 0); opacity: 0; }
+    84% { transform: translate(0,0); clip-path: inset(0 0 100% 0); opacity: 0; }
+    85% { transform: translate(-4px,1px); clip-path: inset(12% 0 64% 0); opacity: 0.85; }
+    88% { transform: translate(3px,-2px); clip-path: inset(58% 0 18% 0); opacity: 0.7; }
+    91% { transform: translate(-2px,0); clip-path: inset(30% 0 44% 0); opacity: 0.8; }
+    94% { transform: translate(0,0); clip-path: inset(0 0 100% 0); opacity: 0; }
+  }
+  @keyframes glitchB {
+    0%, 100% { transform: translate(0,0); clip-path: inset(100% 0 0 0); opacity: 0; }
+    52% { transform: translate(0,0); clip-path: inset(100% 0 0 0); opacity: 0; }
+    53% { transform: translate(3px,-1px); clip-path: inset(64% 0 14% 0); opacity: 0.6; }
+    55% { transform: translate(0,0); clip-path: inset(100% 0 0 0); opacity: 0; }
+    83% { transform: translate(0,0); clip-path: inset(100% 0 0 0); opacity: 0; }
+    84% { transform: translate(4px,-1px); clip-path: inset(70% 0 6% 0); opacity: 0.75; }
+    87% { transform: translate(-3px,1px); clip-path: inset(20% 0 62% 0); opacity: 0.65; }
+    91% { transform: translate(2px,0); clip-path: inset(46% 0 34% 0); opacity: 0.75; }
+    94% { transform: translate(0,0); clip-path: inset(100% 0 0 0); opacity: 0; }
+  }
+  @keyframes aura {
+    0%, 100% { opacity: 0.45; transform: translate(-50%,-50%) scale(1); }
+    50% { opacity: 0.75; transform: translate(-50%,-50%) scale(1.12); }
+  }
+  @keyframes auraInner {
+    0%, 100% { opacity: 0.5; transform: translate(-50%,-50%) scale(1.08); }
+    50% { opacity: 0.85; transform: translate(-50%,-50%) scale(1); }
+  }
+  @keyframes staticFuzz {
+    0% { background-position: 0 0; }
+    33% { background-position: -46px 31px; }
+    66% { background-position: 38px -52px; }
+    100% { background-position: -21px -37px; }
+  }
+  ::selection { background: rgba(143,176,255,0.28); }
+  a { color: #e9edf7; }
+  a:hover { color: #8fb0ff; }
+  @keyframes ambientA { 0% { transform: translate(-12vw,-8vh) scale(1); opacity: 0.14; } 25% { transform: translate(6vw,14vh) scale(1.2); opacity: 0.21; } 50% { transform: translate(16vw,-4vh) scale(1.3); opacity: 0.17; } 75% { transform: translate(-4vw,10vh) scale(1.1); opacity: 0.22; } 100% { transform: translate(-12vw,-8vh) scale(1); opacity: 0.14; } }
+  @keyframes ambientB { 0% { transform: translate(10vw,12vh) scale(1.15); opacity: 0.18; } 30% { transform: translate(-8vw,-6vh) scale(0.95); opacity: 0.12; } 60% { transform: translate(-14vw,8vh) scale(1.25); opacity: 0.19; } 100% { transform: translate(10vw,12vh) scale(1.15); opacity: 0.18; } }
+
+  /* ---- responsive: phones/tablets only (desktop untouched) ---- */
+  @media (max-width: 840px) {
+    [data-mq="split"] { grid-template-columns: 1fr !important; }
+    [data-mq="split"] > a { border-right: none !important; padding-left: 0 !important; padding-right: 0 !important; }
+    [data-mq="stats"] { display: flex !important; flex-wrap: wrap !important; justify-content: center !important; gap: 0.7rem 2rem !important; }
+    [data-mq="world"] { grid-template-columns: 1fr !important; }
+    [data-mq="proj"] { grid-template-columns: 1fr !important; gap: 1.1rem !important; }
+    [data-mq="proj"] > div:first-child { max-width: 420px; }
+    [data-mq="films"] { grid-template-columns: repeat(2, 1fr) !important; }
+    [data-mq="resume-body"] { grid-template-columns: 1fr !important; }
+    [data-mq="hero-row"] { flex-wrap: wrap !important; gap: 1.2rem !important; }
+  }
+  /* ---- large TVs: gently scale everything up ---- */
+  @media (min-width: 2200px) { html { font-size: 19px; } }
+</style>
+</helmet>
+
+<div style="min-height:100vh; background:#05070d; color:#e9edf7; font-family:'Public Sans',system-ui,sans-serif; font-weight:300; line-height:1.65;">
+
+  <!-- ambient drifting glow -->
+  <div aria-hidden="true" style="position:fixed; inset:0; z-index:0; pointer-events:none; overflow:hidden;">
+    <span style="position:absolute; top:8%; left:18%; width:55vw; height:55vw; background:radial-gradient(circle at center, rgba(110,140,255,0.5), transparent 65%); filter:blur(70px); animation:ambientA 52s ease-in-out infinite;"></span>
+    <span style="position:absolute; bottom:5%; right:12%; width:48vw; height:48vw; background:radial-gradient(circle at center, rgba(140,110,255,0.4), transparent 65%); filter:blur(70px); animation:ambientB 64s ease-in-out infinite;"></span>
+  </div>
+
+  <!-- Nav -->
+  <header style="position:fixed; top:0; left:0; right:0; z-index:100; display:flex; align-items:center; justify-content:space-between; padding:1.1rem clamp(1.25rem,4vw,3rem); background:rgba(5,7,13,0.72); backdrop-filter:blur(12px); border-bottom:1px solid rgba(136,160,220,0.10);">
+    <a href="/" style="font-family:'Cormorant Garamond',serif; font-size:1.2rem; font-weight:500; letter-spacing:0.18em; text-decoration:none; color:#e9edf7; font-variant-numeric:lining-nums;">DR1PD</a>
+    <nav style="display:flex; gap:2rem; align-items:center;">
+      <a href="/q/" style="font-family:'IBM Plex Mono',monospace; font-size:0.66rem; letter-spacing:0.18em; text-transform:uppercase; color:#93a0bf; text-decoration:none;" style-hover="color:#e9edf7;">Quant</a>
+      <a href="/c/" style="font-family:'IBM Plex Mono',monospace; font-size:0.66rem; letter-spacing:0.18em; text-transform:uppercase; color:#e9edf7; text-decoration:none; border-bottom:1px solid #8fb0ff; padding-bottom:2px;">Create</a>
+      <a href="/r/" style="font-family:'IBM Plex Mono',monospace; font-size:0.66rem; letter-spacing:0.18em; text-transform:uppercase; color:#e9edf7; text-decoration:none; border:1px solid rgba(136,160,220,0.28); border-radius:2px; padding:0.45rem 1rem;" style-hover="border-color:#8fb0ff; color:#8fb0ff;">Résumé</a>
+    </nav>
+  </header>
+
+  <!-- Hero -->
+  <section data-screen-label="Create hero" style="padding:9rem clamp(1.25rem,4vw,3rem) 3.5rem;">
+    <div style="max-width:1020px; margin:0 auto;">
+      <span style="font-family:'IBM Plex Mono',monospace; font-size:0.62rem; letter-spacing:0.3em; text-transform:uppercase; color:#5c6885;">Film · Design · Life</span>
+      <h1 style="margin:0.8rem 0 1rem; font-family:'Cormorant Garamond',serif; font-weight:400; font-size:clamp(3rem,7vw,4.8rem); line-height:1; color:#e9edf7;">Create</h1>
+      <p style="margin:0; max-width:34rem; color:#93a0bf; font-size:0.95rem;">A lifelong film series, based on a true story — <em style="font-family:'Cormorant Garamond',serif;">Determined, Resilient 1 Pursuing Dreams.</em></p>
+    </div>
+  </section>
+
+  <!-- Featured film -->
+  <section data-screen-label="Featured film" style="padding:1rem clamp(1.25rem,4vw,3rem) 4rem;">
+    <div style="max-width:1020px; margin:0 auto;">
+      <div style="text-align:center; margin-bottom:1.4rem;">
+        <span style="font-family:'IBM Plex Mono',monospace; font-size:0.62rem; letter-spacing:0.3em; text-transform:uppercase; color:#8fb0ff;">Now showing</span>
+      </div>
+
+      <!-- Swap this div for the YouTube iframe when the video ID exists:
+           <iframe src="https://www.youtube-nocookie.com/embed/VIDEO_ID" title="?GROUNDZERO?" style="width:100%; aspect-ratio:16/9; border:0;" allowfullscreen></iframe> -->
+      <div style-hover="border-color:#8fb0ff; box-shadow:0 0 24px rgba(143,176,255,0.12);" style="position:relative; width:100%; aspect-ratio:16/9; border:1px solid rgba(136,160,220,0.15); transition:border-color 0.25s ease, background 0.25s ease, box-shadow 0.25s ease; background:radial-gradient(ellipse at center, #0b1220 0%, #05070d 80%); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:0.8rem;">
+        <span style="font-family:'Cormorant Garamond',serif; font-size:clamp(2rem,5vw,3.4rem); letter-spacing:0.06em; color:#e9edf7;">?GROUNDZERO?</span>
+        <span style="font-family:'IBM Plex Mono',monospace; font-size:0.6rem; letter-spacing:0.3em; text-transform:uppercase; color:#5c6885;">Featured film — premiere to follow</span>
+      </div>
+
+      <!-- Channel link -->
+      <a href="https://www.youtube.com/@dr1pd" target="_blank" rel="noopener" onMouseEnter="{{ enterYt }}" onMouseLeave="{{ leaveYt }}" style="display:flex; width:fit-content; align-items:center; justify-content:center; gap:0.9rem; margin:1.6rem auto 0; text-decoration:none; color:inherit; padding-bottom:5px; background-image:linear-gradient(#8fb0ff,#8fb0ff); background-repeat:no-repeat; background-position:left bottom; background-size:{{ ytEnterSize }}; transition:background-size 0.25s ease-out;">
+        <svg width="22" height="16" viewBox="0 0 22 16" aria-hidden="true"><rect x="0.5" y="0.5" width="21" height="15" rx="3.5" fill="none" stroke="#8fb0ff" stroke-width="1"></rect><path d="M9 4.8 L14.2 8 L9 11.2 Z" fill="#8fb0ff"></path></svg>
+        <span style="font-family:'Cormorant Garamond',serif; font-size:1.15rem; letter-spacing:0.16em; font-variant-numeric:lining-nums;">DR1PD</span>
+        <span style="font-family:'IBM Plex Mono',monospace; font-size:0.6rem; letter-spacing:0.2em; text-transform:uppercase; color:{{ ytSubColor }}; transition:color 0.2s ease;">on YouTube →</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- Decalogy -->
+  <section data-screen-label="Decalogy" style="padding:3rem clamp(1.25rem,4vw,3rem) 5rem;">
+    <div style="max-width:1020px; margin:0 auto;">
+      <div style="margin-bottom:1.8rem;">
+        <h2 style="margin:0 0 0.6rem; font-family:'Cormorant Garamond',serif; font-weight:400; font-size:clamp(1.9rem,4vw,2.6rem); line-height:1.1; color:#e9edf7;">Decalogy</h2>
+        <p style="margin:0; max-width:34rem; color:#93a0bf; font-size:0.9rem;">Ten films, told in order. Each unlocks when ready.</p>
+      </div>
+
+      <div data-mq="films" style="display:grid; grid-template-columns:repeat(5, 1fr); gap:1px; background:rgba(136,160,220,0.13); border:1px solid rgba(136,160,220,0.13);">
+        <sc-for list="{{ films }}" as="film" hint-placeholder-count="10">
+          <div onClick="{{ film.onClick }}" role="{{ film.role }}" style="position:relative; aspect-ratio:1/1; background:{{ film.bg }}; display:flex; flex-direction:column; justify-content:space-between; padding:1.1rem; transition:background 0.3s ease;" style-hover="background:#0b1220;">
+            <span style="font-family:'IBM Plex Mono',monospace; font-size:0.62rem; letter-spacing:0.14em; color:{{ film.numColor }};">{{ film.num }}</span>
+            <div>
+              <span style="display:block; font-family:'Cormorant Garamond',serif; font-size:0.98rem; letter-spacing:0.05em; line-height:1.3; color:{{ film.titleColor }};">{{ film.title }}</span>
+              <span style="display:block; margin-top:0.3rem; font-family:'IBM Plex Mono',monospace; font-size:0.52rem; letter-spacing:0.16em; text-transform:uppercase; color:#5c6885;">{{ film.status }}</span>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+
+  <!-- Player overlay -->
+  <sc-if value="{{ playerOpen }}" hint-placeholder-val="{{ false }}">
+    <div onClick="{{ closePlayer }}" style="position:fixed; inset:0; z-index:200; background:rgba(3,5,10,0.88); backdrop-filter:blur(8px); display:flex; align-items:center; justify-content:center; padding:clamp(1rem,4vw,3rem);">
+      <div onClick="{{ stopProp }}" style="position:relative; width:min(1000px,100%);">
+        <div style="display:flex; align-items:baseline; justify-content:space-between; margin-bottom:0.8rem;">
+          <span style="font-family:'Cormorant Garamond',serif; font-size:1.4rem; letter-spacing:0.06em; color:#e9edf7;">{{ playerTitle }}</span>
+          <span onClick="{{ closePlayer }}" role="button" aria-label="Close" style="font-family:'IBM Plex Mono',monospace; font-size:0.62rem; letter-spacing:0.2em; text-transform:uppercase; color:#93a0bf; border:1px solid rgba(136,160,220,0.28); padding:0.35rem 0.8rem;" style-hover="color:#8fb0ff; border-color:#8fb0ff;">Close ✕</span>
+        </div>
+        <sc-if value="{{ playerHasVideo }}" hint-placeholder-val="{{ false }}">
+          <iframe src="{{ playerSrc }}" title="{{ playerTitle }}" allow="autoplay; fullscreen; encrypted-media" allowfullscreen="{{ true }}" style="width:100%; aspect-ratio:16/9; border:1px solid rgba(136,160,220,0.2); display:block; background:#000;"></iframe>
+        </sc-if>
+        <sc-if value="{{ playerNoVideo }}" hint-placeholder-val="{{ false }}">
+          <div style="width:100%; aspect-ratio:16/9; border:1px solid rgba(136,160,220,0.2); background:radial-gradient(ellipse at center, #0b1220 0%, #05070d 80%); display:flex; align-items:center; justify-content:center;">
+            <span style="font-family:'IBM Plex Mono',monospace; font-size:0.62rem; letter-spacing:0.3em; text-transform:uppercase; color:#5c6885;">Premiere to follow</span>
+          </div>
+        </sc-if>
+      </div>
+    </div>
+  </sc-if>
+
+  <!-- WDIYP -->
+  <section data-screen-label="WDIYP" style="padding:4rem clamp(1.25rem,4vw,3rem) 5rem; text-align:center; position:relative; overflow:hidden;">
+    <a data-reveal="true" href="https://wdiyp.com" target="_blank" rel="noopener" style="position:relative; display:flex; align-items:center; justify-content:center; width:min(90vw,620px); height:min(90vw,620px); margin:0 auto; text-decoration:none;">
+      <!-- layered, slow-breathing glow -->
+      <span style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:88%; height:62%; background:radial-gradient(ellipse at center, rgba(110,140,255,0.18) 0%, rgba(140,110,255,0.07) 45%, transparent 72%); filter:blur(30px); animation:aura 7s ease-in-out infinite; pointer-events:none;"></span>
+      <span style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:46%; height:26%; background:radial-gradient(ellipse at center, rgba(220,230,255,0.12), transparent 70%); filter:blur(20px); animation:auraInner 4.6s ease-in-out infinite; pointer-events:none;"></span>
+      <!-- static fuzz ring -->
+      <span aria-hidden="true" style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:74%; height:44%; background-image:url('data:image/svg+xml;utf8,&lt;svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22140%22 height=%22140%22&gt;&lt;filter id=%22n%22&gt;&lt;feTurbulence type=%22fractalNoise%22 baseFrequency=%220.9%22 numOctaves=%222%22 stitchTiles=%22stitch%22/&gt;&lt;/filter&gt;&lt;rect width=%22140%22 height=%22140%22 filter=%22url(%23n)%22 opacity=%220.9%22/&gt;&lt;/svg&gt;'); mix-blend-mode:screen; opacity:0.14; -webkit-mask-image:radial-gradient(ellipse at center, transparent 32%, rgba(0,0,0,0.9) 55%, transparent 78%); mask-image:radial-gradient(ellipse at center, transparent 32%, rgba(0,0,0,0.9) 55%, transparent 78%); animation:staticFuzz 0.45s steps(3) infinite; pointer-events:none;"></span>
+      <span style="position:relative; display:block;">
+        <span style="display:block; font-family:'Cormorant Garamond',serif; font-size:clamp(2.4rem,6vw,4.2rem); letter-spacing:0.08em; line-height:1; color:#e9edf7; text-shadow:0 0 22px rgba(143,176,255,0.5), 0 0 60px rgba(95,125,255,0.25);">WDIYP.com</span>
+        <span aria-hidden="true" style="position:absolute; inset:0; display:block; font-family:'Cormorant Garamond',serif; font-size:clamp(2.4rem,6vw,4.2rem); letter-spacing:0.08em; line-height:1; color:#8fb0ff; animation:glitchA 6s steps(1) infinite; pointer-events:none;">WDIYP.com</span>
+        <span aria-hidden="true" style="position:absolute; inset:0; display:block; font-family:'Cormorant Garamond',serif; font-size:clamp(2.4rem,6vw,4.2rem); letter-spacing:0.08em; line-height:1; color:#b79bff; animation:glitchB 7.3s steps(1) infinite; pointer-events:none;">WDIYP.com</span>
+        <span style="display:block; margin-top:1rem; font-family:'IBM Plex Mono',monospace; font-size:0.6rem; letter-spacing:0.32em; text-transform:uppercase; color:#5c6885;">The world is your playground.</span>
+      </span>
+    </a>
+  </section>
+
+  <!-- Cross-link -->
+  <section data-screen-label="Cross-link" style="padding:2.5rem clamp(1.25rem,4vw,3rem) 3rem; text-align:center;">
+    <div style="display:flex; gap:2.5rem; justify-content:center;">
+      <a href="/q/" style="font-family:'IBM Plex Mono',monospace; font-size:0.7rem; letter-spacing:0.24em; text-transform:uppercase; color:#e9edf7; text-decoration:none; padding-bottom:5px; border-bottom:1px solid rgba(136,160,220,0.35);" style-hover="color:#8fb0ff; border-color:#8fb0ff;">Quant</a>
+      <a href="/r/" style="font-family:'IBM Plex Mono',monospace; font-size:0.7rem; letter-spacing:0.24em; text-transform:uppercase; color:#e9edf7; text-decoration:none; padding-bottom:5px; border-bottom:1px solid rgba(136,160,220,0.35);" style-hover="color:#8fb0ff; border-color:#8fb0ff;">Résumé</a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer style="border-top:1px solid rgba(136,160,220,0.10); padding:1.6rem clamp(1.25rem,4vw,3rem); display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:0.8rem;">
+    <span style="font-family:'Cormorant Garamond',serif; font-style:italic; font-size:0.9rem; color:#5c6885; font-variant-numeric:lining-nums;">© 2026 DR1PD</span>
+    <div style="display:flex; gap:0.6rem;">
+      <a href="https://www.linkedin.com/in/dr1pd/" target="_blank" rel="noopener" aria-label="LinkedIn" style="width:30px; height:30px; display:flex; align-items:center; justify-content:center; text-decoration:none;" style-hover="opacity:1;"><img src="/social-li-sq.png" alt="" style="width:24px; height:24px; opacity:0.7;"></a>
+      <a href="https://github.com/dr1pd" target="_blank" rel="noopener" aria-label="GitHub" style="width:30px; height:30px; display:flex; align-items:center; justify-content:center; text-decoration:none;" style-hover="opacity:1;"><img src="/social-gh-sq.png" alt="" style="width:24px; height:24px; opacity:0.7;"></a>
+    </div>
+  </footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { player: null };
+
+  componentDidMount() {
+    const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const arm = () => {
+      const els = document.querySelectorAll('[data-reveal]:not([data-revealed])');
+      if (!els.length) return;
+      els.forEach(el => {
+        el.dataset.revealed = "armed";
+        if (reduced) return;
+        el.style.opacity = "0";
+        el.style.transform = "translateY(28px)";
+        el.style.transition = "opacity 0.9s ease, transform 0.9s ease";
+        this._revealObs.observe(el);
+      });
+    };
+    this._revealObs = new IntersectionObserver((entries) => {
+      this._ioLive = true;
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.style.opacity = "1";
+          e.target.style.transform = "translateY(0)";
+          this._revealObs.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.15, rootMargin: "0px 0px -6% 0px" });
+    arm();
+    let tries = 0;
+    this._revealT = setInterval(() => { arm(); if (++tries > 10) clearInterval(this._revealT); }, 300);
+    // fail-safe: if IntersectionObserver never fires (throttled/unavailable), force-reveal
+    this._revealSafety = setTimeout(() => {
+      if (this._ioLive) return; // observer is working — let scroll drive the reveals
+      document.querySelectorAll('[data-reveal][data-revealed]').forEach(el => {
+        el.style.opacity = "1"; el.style.transform = "translateY(0)";
+      });
+    }, 2000);
+  }
+
+  componentWillUnmount() {
+    if (this._revealObs) this._revealObs.disconnect();
+    if (this._revealT) clearInterval(this._revealT);
+    if (this._revealSafety) clearTimeout(this._revealSafety);
+  }
+
+  renderVals() {
+    const unlockedBg = "#0a0f1b";
+    const lockedBg = "#060911";
+    // Set ytId to the (unlisted) YouTube video ID when each film is ready.
+    const films = [
+      { num: "1", title: "Moi je joue", status: "Vanity? Fair.", locked: false, ytId: null },
+      { num: "2", title: "22", status: "\"Project D!\"", locked: false, ytId: null },
+      { num: "3", title: "Graduation", status: "Requirements met.", locked: false, ytId: null },
+    ];
+    for (let i = 4; i <= 10; i++) {
+      films.push({ num: String(i), title: "· · ·", status: "Locked", locked: true, ytId: null });
+    }
+    const p = this.state.player;
+    return {
+      ytEnterSize: this.state.ytHover ? "100% 1px" : "0% 1px",
+      ytSubColor: this.state.ytHover ? "#8fb0ff" : "#5c6885",
+      enterYt: () => this.setState({ ytHover: true }),
+      leaveYt: () => this.setState({ ytHover: false }),
+      films: films.map(f => ({
+        ...f,
+        bg: f.locked ? lockedBg : unlockedBg,
+        numColor: f.locked ? "#3a465f" : "#8fb0ff",
+        titleColor: f.locked ? "#3a465f" : "#e9edf7",
+        role: f.locked ? null : "button",
+        onClick: f.locked ? null : () => this.setState({ player: f }),
+      })),
+      playerOpen: !!p,
+      playerTitle: p ? p.title : "",
+      playerHasVideo: !!(p && p.ytId),
+      playerNoVideo: !!(p && !p.ytId),
+      playerSrc: p && p.ytId ? `https://www.youtube-nocookie.com/embed/${p.ytId}?autoplay=1` : "",
+      closePlayer: () => this.setState({ player: null }),
+      stopProp: (e) => e.stopPropagation(),
+    };
+  }
+}
+</script>
+</body>
+</html>

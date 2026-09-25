@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,400&amp;family=Fragment+Mono&amp;family=Public+Sans:wght@300;400;500&amp;display=swap" rel="stylesheet">
+<style>
+  html, body { margin: 0; padding: 0; background: #05070d; }
+  body {
+    -webkit-font-smoothing: antialiased;
+    cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='22' height='22' viewBox='0 0 22 22'><circle cx='11' cy='11' r='9' fill='none' stroke='%23aebfe8' stroke-width='1.2'/><ellipse cx='11' cy='11' rx='4' ry='9' fill='none' stroke='%23aebfe8' stroke-width='0.8'/><path d='M2.6 8 h16.8 M2.6 14 h16.8' stroke='%23aebfe8' stroke-width='0.8' fill='none'/></svg>") 11 11, auto;
+  }
+  a, button, [role="button"] {
+    cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='22' height='22' viewBox='0 0 22 22'><circle cx='11' cy='11' r='9' fill='none' stroke='%238fb0ff' stroke-width='1.4'/><ellipse cx='11' cy='11' rx='4' ry='9' fill='none' stroke='%238fb0ff' stroke-width='0.9'/><path d='M2.6 8 h16.8 M2.6 14 h16.8' stroke='%238fb0ff' stroke-width='0.9' fill='none'/></svg>") 11 11, pointer;
+  }
+  @keyframes glitchA {
+    0%, 100% { transform: translate(0,0); clip-path: inset(0 0 100% 0); opacity: 0; }
+    41% { transform: translate(0,0); clip-path: inset(0 0 100% 0); opacity: 0; }
+    42% { transform: translate(-3px,1px); clip-path: inset(24% 0 52% 0); opacity: 0.7; }
+    44% { transform: translate(0,0); clip-path: inset(0 0 100% 0); opacity: 0; }
+    84% { transform: translate(0,0); clip-path: inset(0 0 100% 0); opacity: 0; }
+    85% { transform: translate(-4px,1px); clip-path: inset(12% 0 64% 0); opacity: 0.85; }
+    88% { transform: translate(3px,-2px); clip-path: inset(58% 0 18% 0); opacity: 0.7; }
+    91% { transform: translate(-2px,0); clip-path: inset(30% 0 44% 0); opacity: 0.8; }
+    94% { transform: translate(0,0); clip-path: inset(0 0 100% 0); opacity: 0; }
+  }
+  @keyframes glitchB {
+    0%, 100% { transform: translate(0,0); clip-path: inset(100% 0 0 0); opacity: 0; }
+    52% { transform: translate(0,0); clip-path: inset(100% 0 0 0); opacity: 0; }
+    53% { transform: translate(3px,-1px); clip-path: inset(64% 0 14% 0); opacity: 0.6; }
+    55% { transform: translate(0,0); clip-path: inset(100% 0 0 0); opacity: 0; }
+    83% { transform: translate(0,0); clip-path: inset(100% 0 0 0); opacity: 0; }
+    84% { transform: translate(4px,-1px); clip-path: inset(70% 0 6% 0); opacity: 0.75; }
+    87% { transform: translate(-3px,1px); clip-path: inset(20% 0 62% 0); opacity: 0.65; }
+    91% { transform: translate(2px,0); clip-path: inset(46% 0 34% 0); opacity: 0.75; }
+    94% { transform: translate(0,0); clip-path: inset(100% 0 0 0); opacity: 0; }
+  }
+  @keyframes aura {
+    0%, 100% { opacity: 0.45; transform: translate(-50%,-50%) scale(1); }
+    50% { opacity: 0.75; transform: translate(-50%,-50%) scale(1.12); }
+  }
+  @keyframes auraInner {
+    0%, 100% { opacity: 0.5; transform: translate(-50%,-50%) scale(1.08); }
+    50% { opacity: 0.85; transform: translate(-50%,-50%) scale(1); }
+  }
+  @keyframes staticFuzz {
+    0% { background-position: 0 0; }
+    33% { background-position: -46px 31px; }
+    66% { background-position: 38px -52px; }
+    100% { background-position: -21px -37px; }
+  }
+  ::selection { background: rgba(143,176,255,0.28); }
+  a { color: #e9edf7; }
+  a:hover { color: #8fb0ff; }
+  @keyframes ambientA { 0% { transform: translate(-12vw,-8vh) scale(1); opacity: 0.14; } 25% { transform: translate(6vw,14vh) scale(1.2); opacity: 0.21; } 50% { transform: translate(16vw,-4vh) scale(1.3); opacity: 0.17; } 75% { transform: translate(-4vw,10vh) scale(1.1); opacity: 0.22; } 100% { transform: translate(-12vw,-8vh) scale(1); opacity: 0.14; } }
+  @keyframes ambientC { 0% { transform: translate(-6vw,6vh) scale(1); opacity: 0.12; } 33% { transform: translate(8vw,-10vh) scale(1.18); opacity: 0.19; } 66% { transform: translate(-12vw,-2vh) scale(0.9); opacity: 0.11; } 100% { transform: translate(-6vw,6vh) scale(1); opacity: 0.12; } }
+  @keyframes grainShift { 0% { transform: translate(0,0); } 33% { transform: translate(-2%,1%); } 66% { transform: translate(1%,-2%); } 100% { transform: translate(0,0); } }
+  @media (prefers-reduced-motion: reduce) { [aria-hidden="true"] > span { animation: none !important; } }
+  @keyframes ambientB { 0% { transform: translate(10vw,12vh) scale(1.15); opacity: 0.18; } 30% { transform: translate(-8vw,-6vh) scale(0.95); opacity: 0.12; } 60% { transform: translate(-14vw,8vh) scale(1.25); opacity: 0.19; } 100% { transform: translate(10vw,12vh) scale(1.15); opacity: 0.18; } }
+
+  /* ---- responsive: phones/tablets only (desktop untouched) ---- */
+  @media (max-width: 840px) {
+    [data-mq="split"] { grid-template-columns: 1fr !important; }
+    [data-mq="split"] > a { border-right: none !important; padding-left: 0 !important; padding-right: 0 !important; }
+    [data-mq="stats"] { display: flex !important; flex-wrap: wrap !important; justify-content: center !important; gap: 0.7rem 2rem !important; }
+    [data-mq="world"] { grid-template-columns: 1fr !important; }
+    [data-mq="proj"] { grid-template-columns: 1fr !important; gap: 1.1rem !important; }
+    [data-mq="proj"] > div:first-child { max-width: 420px; }
+    [data-mq="films"] { grid-template-columns: repeat(2, 1fr) !important; }
+    [data-mq="resume-body"] { grid-template-columns: 1fr !important; }
+    [data-mq="hero-row"] { flex-wrap: wrap !important; gap: 1.2rem !important; }
+  }
+  /* ---- phone additions: tap targets, windows, text ---- */
+  @media (max-width: 840px) {
+    [data-mq="nav"] { gap: 1.1rem !important; }
+    [data-mq="nav"] > a { padding: 0.75rem 0.5rem !important; }
+    [data-mq="nav"] > a:last-child { padding: 0.6rem 0.9rem !important; }
+    [data-mq="ach-title"], [data-mq="ach-sub"], [data-mq="wall-title"] { white-space: normal !important; }
+    [data-mq="bucket-win"] { overflow: auto !important; max-height: 92dvh !important; }
+    [data-mq="bucket-grid"] { flex: none !important; grid-template-rows: repeat(34, 24px) !important; }
+    [data-mq="papers-grid"] { grid-template-columns: repeat(2, minmax(0,1fr)) !important; }
+    [data-mq="win"] { max-height: 92dvh !important; }
+  }
+  @media (max-width: 600px) { html { font-size: 17px; } }
+  /* ---- phone polish: stacked project cards, GIF autoplay, full-width overlays, safe-area, no iOS zoom ---- */
+  @media (max-width: 840px) {
+    /* project skill logos: side column -> horizontal row under the text (matches the reference on phones) */
+    [data-mq="skills"] { flex-direction: row !important; flex-wrap: wrap !important; align-items: center !important; justify-content: flex-start !important; gap: 0.7rem !important; padding-top: 0.2rem !important; }
+    [data-mq="skills"] > span { text-align: left !important; }
+    /* Decalogy squares: 2-up gets tall; 3-up keeps them square-ish */
+    [data-mq="films"] { grid-template-columns: repeat(3, 1fr) !important; }
+    /* Paper / résumé fullscreen: use the whole width, leave room for the close ✕ */
+    [data-mq="fullview"] { padding: 3rem 0.6rem 1rem !important; }
+    [data-mq="fullview"] > div { width: 100% !important; }
+    /* Featured film caption breathes on narrow screens */
+    [data-mq="feature-cap"] { letter-spacing: 0.18em !important; padding: 0 1rem !important; text-align: center !important; }
+    /* Bottom-of-page footer padding respects the home indicator */
+    footer { padding-bottom: calc(1.4rem + env(safe-area-inset-bottom)) !important; }
+  }
+  @media (hover: none) {
+    /* Quant project GIFs: no hover on touch, so show the live capture instead of the static line art */
+    [data-mq="proj-art"] { opacity: 0 !important; }
+    /* skill logos/boxes: rest in the brighter blue since there's no hover to reveal it */
+    [data-mq="skills"] [role="img"] { background: #a9c0ff !important; }
+    [data-mq="skills"] [data-box] { color: #a9c0ff !important; border-color: rgba(169,192,255,0.5) !important; }
+  }
+  @media (max-width: 420px) {
+    /* Decalogy: 2-up on the smallest phones so the lock + title stay readable */
+    [data-mq="films"] { grid-template-columns: repeat(2, 1fr) !important; }
+    /* Featured film title shouldn't kiss the box edges */
+    [data-mq="feature-title"] { font-size: 1.6rem !important; letter-spacing: 0.04em !important; }
+  }
+  /* ---- touch devices: no hover, so reveal hover-only controls and widen hit areas ---- */
+  @media (hover: none) {
+    * { -webkit-tap-highlight-color: transparent; }
+    [data-mq="dl"] { opacity: 1 !important; transform: none !important; }
+    [data-mq="pop"] { opacity: 1 !important; pointer-events: auto !important; top: auto !important; bottom: 0 !important; }
+    [data-mq="layer-socials"] { padding-bottom: 62px !important; }
+    [data-mq="layer-web"] { padding-bottom: 58px !important; }
+    [data-mq="cardlabel"] { opacity: 1 !important; }
+    [data-mq="switch"] { padding: 12px !important; margin: -12px !important; box-sizing: content-box !important; }
+    [role="button"][aria-label="Close"] { padding: 0.7rem 0.9rem !important; }
+  }
+  @media (max-width: 420px) {
+    header { padding-left: 1rem !important; padding-right: 1rem !important; }
+    [data-mq="nav"] { gap: 0.6rem !important; }
+    [data-mq="nav"] > a { padding: 0.75rem 0.3rem !important; }
+    [data-mq="nav"] > a:last-child { padding: 0.6rem 0.7rem !important; }
+  }
+  /* ---- large TVs: gently scale everything up ---- */
+  @media (min-width: 2200px) { html { font-size: 19px; } }
+</style>
+</helmet>
+
+<div style="min-height:100vh; background:#05070d; color:#e9edf7; font-family:'Public Sans',system-ui,sans-serif; font-weight:300; line-height:1.65;">
+
+  <!-- ambient drifting glow -->
+  <div aria-hidden="true" style="position:fixed; inset:0; z-index:0; pointer-events:none; overflow:hidden;">
+    <span style="position:absolute; top:8%; left:18%; width:55vw; height:55vw; background:radial-gradient(circle at center, rgba(110,140,255,0.5), transparent 65%); filter:blur(70px); animation:ambientA 52s ease-in-out infinite;"></span>
+    <span style="position:absolute; bottom:5%; right:12%; width:48vw; height:48vw; background:radial-gradient(circle at center, rgba(217,199,160,0.24), transparent 65%); filter:blur(70px); animation:ambientB 64s ease-in-out infinite;"></span>
+    <span style="position:absolute; top:40%; left:55%; width:42vw; height:42vw; background:radial-gradient(circle at center, rgba(70,90,200,0.42), transparent 65%); filter:blur(80px); animation:ambientC 78s ease-in-out infinite;"></span>
+    <span style="position:absolute; inset:0; background:radial-gradient(ellipse 80% 70% at 50% 45%, transparent 55%, rgba(3,5,10,0.55) 100%);"></span>
+    <span style="position:absolute; inset:-50%; width:200%; height:200%; opacity:0.045; mix-blend-mode:overlay; background-image:url(&quot;data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.6 0'/></filter><rect width='160' height='160' filter='url(%23n)'/></svg>&quot;); background-size:160px 160px; animation:grainShift 0.9s steps(3) infinite;"></span>
+  </div>
+
+  <!-- Nav -->
+  <header style="position:fixed; top:0; left:0; right:0; z-index:100; display:flex; align-items:center; justify-content:space-between; padding:1.1rem clamp(1.25rem,4vw,3rem); background:rgba(5,7,13,0.72); backdrop-filter:blur(12px); border-bottom:1px solid rgba(136,160,220,0.10);">
+    <a href="Index.dc.html" style="font-family:'Cormorant Garamond',serif; font-size:1.2rem; font-weight:500; letter-spacing:0.18em; text-decoration:none; color:#e9edf7; font-variant-numeric:lining-nums;">DR1PD</a>
+    <nav data-mq="nav" style="display:flex; gap:2rem; align-items:center;">
+      <a href="Quant.dc.html" style="font-family:'Fragment Mono',monospace; font-size:0.66rem; letter-spacing:0.18em; text-transform:uppercase; color:#93a0bf; text-decoration:none;" style-hover="color:#e9edf7;">Quant</a>
+      <a href="Create.dc.html" style="font-family:'Fragment Mono',monospace; font-size:0.66rem; letter-spacing:0.18em; text-transform:uppercase; color:#e9edf7; text-decoration:none; border-bottom:1px solid #8fb0ff; padding-bottom:2px;">Create</a>
+      <a href="Resume.dc.html" style="font-family:'Fragment Mono',monospace; font-size:0.66rem; letter-spacing:0.18em; text-transform:uppercase; color:#e9edf7; text-decoration:none; border:1px solid rgba(136,160,220,0.28); border-radius:2px; padding:0.45rem 1rem;" style-hover="border-color:#8fb0ff; color:#8fb0ff;">Résumé</a>
+    </nav>
+  </header>
+
+  <!-- Hero -->
+  <section data-screen-label="Create hero" style="padding:9rem clamp(1.25rem,4vw,3rem) 3.5rem;">
+    <div style="max-width:1020px; margin:0 auto;">
+      <h1 style="margin:0 0 1rem; font-family:'Cormorant Garamond',serif; font-weight:400; font-size:clamp(3rem,7vw,4.8rem); line-height:1; color:#e9edf7;">Create</h1>
+      <p style="margin:0; max-width:34rem; color:#93a0bf; font-size:0.95rem;">A lifelong film series, based on a true story — <em style="font-family:'Cormorant Garamond',serif;">Determined, Resilient 1 Pursuing Dreams.</em></p>
+    </div>
+  </section>
+
+  <!-- Featured film -->
+  <section data-screen-label="Featured film" style="padding:1rem clamp(1.25rem,4vw,3rem) 4rem;">
+    <div style="max-width:1020px; margin:0 auto;">
+      <div style="text-align:center; margin-bottom:1.4rem;">
+        <span style="font-family:'Fragment Mono',monospace; font-size:0.62rem; letter-spacing:0.3em; text-transform:uppercase; color:#8fb0ff;">Featuring</span>
+      </div>
+
+      <!-- Swap this div for the YouTube iframe when the video ID exists:
+           <iframe src="https://www.youtube-nocookie.com/embed/VIDEO_ID" title="?GROUNDZERO?" style="width:100%; aspect-ratio:16/9; border:0;" allowfullscreen></iframe> -->
+      <div style-hover="border-color:#8fb0ff; box-shadow:0 0 24px rgba(143,176,255,0.12);" style="position:relative; width:100%; aspect-ratio:16/9; border:1px solid rgba(136,160,220,0.15); transition:border-color 0.25s ease, background 0.25s ease, box-shadow 0.25s ease; background:radial-gradient(ellipse at center, #0b1220 0%, #05070d 80%); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:0.8rem;">
+        <span data-mq="feature-title" style="font-family:'Cormorant Garamond',serif; font-size:clamp(2rem,5vw,3.4rem); letter-spacing:0.06em; color:#e9edf7;">?GROUNDZERO?</span>
+        <span data-mq="feature-cap" style="font-family:'Fragment Mono',monospace; font-size:0.6rem; letter-spacing:0.3em; text-transform:uppercase; color:#5c6885;">Coming soon</span>
+      </div>
+
+      <!-- Channel link -->
+      <a href="https://www.youtube.com/@dr1pd" target="_blank" rel="noopener" onMouseEnter="{{ enterYt }}" onMouseLeave="{{ leaveYt }}" style="display:flex; width:fit-content; align-items:center; justify-content:center; gap:0.9rem; margin:1.6rem auto 0; text-decoration:none; color:inherit; padding-bottom:5px; background-image:linear-gradient(#8fb0ff,#8fb0ff); background-repeat:no-repeat; background-position:left bottom; background-size:{{ ytEnterSize }}; transition:background-size 0.25s ease-out;">
+        <svg width="22" height="16" viewBox="0 0 22 16" aria-hidden="true"><rect x="0.5" y="0.5" width="21" height="15" rx="3.5" fill="none" stroke="#8fb0ff" stroke-width="1"></rect><path d="M9 4.8 L14.2 8 L9 11.2 Z" fill="#8fb0ff"></path></svg>
+        <span style="font-family:'Cormorant Garamond',serif; font-size:1.15rem; letter-spacing:0.16em; font-variant-numeric:lining-nums;">DR1PD</span>
+        <span style="font-family:'Fragment Mono',monospace; font-size:0.6rem; letter-spacing:0.2em; text-transform:uppercase; color:{{ ytSubColor }}; transition:color 0.2s ease;">on YouTube →</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- Decalogy -->
+  <section data-screen-label="Decalogy" style="padding:3rem clamp(1.25rem,4vw,3rem) 5rem;">
+    <div style="max-width:1020px; margin:0 auto;">
+      <div style="margin-bottom:1.8rem;">
+        <h2 style="margin:0 0 0.6rem; font-family:'Cormorant Garamond',serif; font-weight:400; font-size:clamp(1.9rem,4vw,2.6rem); line-height:1.1; color:#e9edf7;">Decalogy</h2>
+        <p style="margin:0; max-width:34rem; color:#93a0bf; font-size:0.9rem;">Ten films, told in order. Each unlocks when ready.</p>
+      </div>
+
+      <div data-mq="films" style="display:grid; grid-template-columns:repeat(5, 1fr); gap:1px; background:rgba(136,160,220,0.13); border:1px solid rgba(136,160,220,0.13);">
+        <sc-for list="{{ films }}" as="film" hint-placeholder-count="10">
+          <a href="{{ film.href }}" target="_blank" rel="noopener" aria-label="{{ film.aria }}" onMouseEnter="{{ film.onEnter }}" onMouseLeave="{{ film.onLeave }}" style="position:relative; overflow:hidden; aspect-ratio:1/1; background:{{ film.bg }}; display:flex; flex-direction:column; justify-content:flex-end; padding:1.1rem; transition:background 0.3s ease; text-decoration:none; color:inherit; cursor:{{ film.cursor }};" style-hover="background:#0b1220;">
+            <sc-if value="{{ film.clip1 }}" hint-placeholder-val="{{ false }}">
+              <video src="film-moi-je-joue.mp4" data-clip="true" autoplay="autoplay" muted="muted" loop="loop" playsinline="playsinline" preload="auto" aria-hidden="true" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:{{ film.clipOpacity }}; transition:opacity 0.35s ease; pointer-events:none;"></video>
+              <span aria-hidden="true" style="position:absolute; inset:0; background:linear-gradient(to top, rgba(5,7,13,0.85), rgba(5,7,13,0.15) 55%, rgba(5,7,13,0.35)); opacity:{{ film.clipOpacity }}; transition:opacity 0.35s ease; pointer-events:none;"></span>
+            </sc-if>
+            <sc-if value="{{ film.clip3 }}" hint-placeholder-val="{{ false }}">
+              <video src="film-graduation.mp4" data-clip="true" autoplay="autoplay" muted="muted" loop="loop" playsinline="playsinline" preload="auto" aria-hidden="true" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:{{ film.clipOpacity }}; transition:opacity 0.35s ease; pointer-events:none;"></video>
+              <span aria-hidden="true" style="position:absolute; inset:0; background:linear-gradient(to top, rgba(5,7,13,0.85), rgba(5,7,13,0.15) 55%, rgba(5,7,13,0.35)); opacity:{{ film.clipOpacity }}; transition:opacity 0.35s ease; pointer-events:none;"></span>
+            </sc-if>
+            <div style="position:relative;">
+              <span style="display:block; font-family:'Cormorant Garamond',serif; font-size:0.98rem; letter-spacing:0.05em; line-height:1.3; color:{{ film.titleColor }};">{{ film.title }}</span>
+              <span style="display:{{ film.statusDisplay }}; margin-top:0.3rem; font-family:'Fragment Mono',monospace; font-size:0.52rem; letter-spacing:0.16em; text-transform:uppercase; color:#5c6885;">{{ film.status }}</span>
+              <svg width="11" height="13" viewBox="0 0 9 11" aria-label="Locked" style="display:{{ film.lockDisplay }}; margin-top:0.3rem; opacity:0.55;">
+                <path d="M2.4 4.4 V2.9 a2.1 2.1 0 0 1 4.2 0 V4.4" fill="none" stroke="#8fb0ff" stroke-width="1"></path>
+                <rect x="1" y="4.4" width="7" height="5.6" rx="1" fill="none" stroke="#8fb0ff" stroke-width="1"></rect>
+              </svg>
+            </div>
+          </a>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- WDIYP -->
+  <section data-screen-label="WDIYP" style="padding:4rem clamp(1.25rem,4vw,3rem) 5rem; text-align:center; position:relative; overflow:hidden;">
+    <a data-reveal="true" href="https://wdiyp.com" target="_blank" rel="noopener" style="position:relative; display:flex; align-items:center; justify-content:center; width:min(90vw,620px); height:min(90vw,620px); margin:0 auto; text-decoration:none;">
+      <!-- layered, slow-breathing glow -->
+      <span style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:88%; height:62%; background:radial-gradient(ellipse at center, rgba(110,140,255,0.18) 0%, rgba(140,110,255,0.07) 45%, transparent 72%); filter:blur(30px); animation:aura 7s ease-in-out infinite; pointer-events:none;"></span>
+      <span style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:46%; height:26%; background:radial-gradient(ellipse at center, rgba(220,230,255,0.12), transparent 70%); filter:blur(20px); animation:auraInner 4.6s ease-in-out infinite; pointer-events:none;"></span>
+      <!-- static fuzz ring -->
+      <span aria-hidden="true" style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:74%; height:44%; background-image:url('data:image/svg+xml;utf8,&lt;svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22140%22 height=%22140%22&gt;&lt;filter id=%22n%22&gt;&lt;feTurbulence type=%22fractalNoise%22 baseFrequency=%220.9%22 numOctaves=%222%22 stitchTiles=%22stitch%22/&gt;&lt;/filter&gt;&lt;rect width=%22140%22 height=%22140%22 filter=%22url(%23n)%22 opacity=%220.9%22/&gt;&lt;/svg&gt;'); mix-blend-mode:screen; opacity:0.14; -webkit-mask-image:radial-gradient(ellipse at center, transparent 32%, rgba(0,0,0,0.9) 55%, transparent 78%); mask-image:radial-gradient(ellipse at center, transparent 32%, rgba(0,0,0,0.9) 55%, transparent 78%); animation:staticFuzz 0.45s steps(3) infinite; pointer-events:none;"></span>
+      <span style="position:relative; display:block;">
+        <span style="display:block; font-family:'Cormorant Garamond',serif; font-size:clamp(2.4rem,6vw,4.2rem); letter-spacing:0.08em; line-height:1; color:#e9edf7; text-shadow:0 0 22px rgba(143,176,255,0.5), 0 0 60px rgba(95,125,255,0.25);">WDIYP.com</span>
+        <span aria-hidden="true" style="position:absolute; inset:0; display:block; font-family:'Cormorant Garamond',serif; font-size:clamp(2.4rem,6vw,4.2rem); letter-spacing:0.08em; line-height:1; color:#8fb0ff; animation:glitchA 6s steps(1) infinite; pointer-events:none;">WDIYP.com</span>
+        <span aria-hidden="true" style="position:absolute; inset:0; display:block; font-family:'Cormorant Garamond',serif; font-size:clamp(2.4rem,6vw,4.2rem); letter-spacing:0.08em; line-height:1; color:#b79bff; animation:glitchB 7.3s steps(1) infinite; pointer-events:none;">WDIYP.com</span>
+        <span style="display:block; margin-top:1rem; font-family:'Fragment Mono',monospace; font-size:0.6rem; letter-spacing:0.32em; text-transform:uppercase; color:#5c6885;">The world is your playground.</span>
+      </span>
+    </a>
+  </section>
+
+  <!-- Cross-link -->
+  <section data-screen-label="Cross-link" style="padding:2.5rem clamp(1.25rem,4vw,3rem) 3rem; text-align:center;">
+    <div style="display:flex; gap:2.5rem; justify-content:center;">
+      <a href="Quant.dc.html" style="font-family:'Fragment Mono',monospace; font-size:0.7rem; letter-spacing:0.24em; text-transform:uppercase; color:#e9edf7; text-decoration:none; padding-bottom:5px; border-bottom:1px solid rgba(136,160,220,0.35);" style-hover="color:#8fb0ff; border-color:#8fb0ff;">Quant</a>
+      <a href="Resume.dc.html" style="font-family:'Fragment Mono',monospace; font-size:0.7rem; letter-spacing:0.24em; text-transform:uppercase; color:#e9edf7; text-decoration:none; padding-bottom:5px; border-bottom:1px solid rgba(136,160,220,0.35);" style-hover="color:#8fb0ff; border-color:#8fb0ff;">Résumé</a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer style="border-top:1px solid rgba(136,160,220,0.10); padding:1.6rem clamp(1.25rem,4vw,3rem); display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:0.8rem;">
+    <span style="font-family:'Cormorant Garamond',serif; font-style:italic; font-size:0.9rem; color:#5c6885; font-variant-numeric:lining-nums;">© 2026 DR1PD</span>
+    <div style="display:flex; gap:0.6rem;">
+      <a href="https://www.linkedin.com/in/dr1pd/" target="_blank" rel="noopener" aria-label="LinkedIn" style="width:30px; height:30px; display:flex; align-items:center; justify-content:center; text-decoration:none;" style-hover="opacity:1;"><img src="social-li-sq.png" alt="" style="width:24px; height:24px; opacity:0.7;"></a>
+      <a href="https://github.com/dr1pd" target="_blank" rel="noopener" aria-label="GitHub" style="width:30px; height:30px; display:flex; align-items:center; justify-content:center; text-decoration:none;" style-hover="opacity:1;"><img src="social-gh-sq.png" alt="" style="width:24px; height:24px; opacity:0.7;"></a>
+    </div>
+  </footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { player: null };
+
+  componentDidMount() {
+    // React doesn't reflect `muted` as an attribute; iOS needs it for autoplay
+    this._clipTimer = setInterval(() => {
+      const vids = document.querySelectorAll('video[data-clip]');
+      if (!vids.length) return;
+      vids.forEach(v => { v.muted = true; v.defaultMuted = true; v.setAttribute('muted', ''); v.loop = true; v.playsInline = true; const p = v.play(); if (p && p.catch) p.catch(() => {}); });
+      clearInterval(this._clipTimer);
+    }, 100);
+    this._escClose = (e) => {
+      
+    };
+    window.addEventListener("keydown", this._escClose);
+    const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const arm = () => {
+      const els = document.querySelectorAll('[data-reveal]:not([data-revealed])');
+      if (!els.length) return;
+      els.forEach(el => {
+        el.dataset.revealed = "armed";
+        if (reduced) return;
+        el.style.opacity = "0";
+        el.style.transform = "translateY(28px)";
+        el.style.transition = "opacity 0.9s ease, transform 0.9s ease";
+        this._revealObs.observe(el);
+      });
+    };
+    this._revealObs = new IntersectionObserver((entries) => {
+      this._ioLive = true;
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.style.opacity = "1";
+          e.target.style.transform = "translateY(0)";
+          this._revealObs.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.15, rootMargin: "0px 0px -6% 0px" });
+    arm();
+    let tries = 0;
+    this._revealT = setInterval(() => { arm(); if (++tries > 10) clearInterval(this._revealT); }, 300);
+    // fail-safe: if IntersectionObserver never fires (throttled/unavailable), force-reveal
+    this._revealSafety = setTimeout(() => {
+      if (this._ioLive) return; // observer is working — let scroll drive the reveals
+      document.querySelectorAll('[data-reveal][data-revealed]').forEach(el => {
+        el.style.opacity = "1"; el.style.transform = "translateY(0)";
+      });
+    }, 2000);
+  }
+
+  componentDidUpdate() {
+    
+  }
+
+  componentWillUnmount() {
+    if (this._escClose) window.removeEventListener("keydown", this._escClose);
+    document.body.style.overflow = "";
+    if (this._revealObs) this._revealObs.disconnect();
+    if (this._revealT) clearInterval(this._revealT);
+    if (this._revealSafety) clearTimeout(this._revealSafety);
+  }
+
+  renderVals() {
+    const unlockedBg = "#0a0f1b";
+    const lockedBg = "#060911";
+    // Set ytId to the (unlisted) YouTube video ID when each film is ready.
+    const films = [
+      { num: "1", title: "Moi je joue", status: "Vanity? Fair.", locked: false, ytId: "wauLrsgtyZ8", clip: 1 },
+      { num: "2", title: "Graduation", status: "Requirements met.", locked: false, ytId: "sGc4uxAxE3U", clip: 3 },
+    ];
+    for (let i = 3; i <= 10; i++) {
+      films.push({ num: String(i), title: "", status: "Locked", locked: true, ytId: null });
+    }
+    const p = this.state.player;
+    return {
+      ytEnterSize: this.state.ytHover ? "100% 1px" : "0% 1px",
+      ytSubColor: this.state.ytHover ? "#8fb0ff" : "#5c6885",
+      enterYt: () => this.setState({ ytHover: true }),
+      leaveYt: () => this.setState({ ytHover: false }),
+      films: films.map(f => ({
+        ...f,
+        bg: f.locked ? lockedBg : unlockedBg,
+        numColor: f.locked ? "#3a465f" : "#8fb0ff",
+        titleColor: f.locked ? "#3a465f" : "#e9edf7",
+        statusDisplay: f.locked ? "none" : "block",
+        lockDisplay: f.locked ? "block" : "none",
+        href: f.locked || !f.ytId ? undefined : "https://youtu.be/" + f.ytId,
+        aria: f.locked ? "Film " + f.num + " — locked" : "Watch " + f.title + " on YouTube",
+        cursor: f.locked || !f.ytId ? "default" : "pointer",
+        clip1: f.clip === 1,
+        clip3: f.clip === 3,
+        clipOpacity: f.clip ? 1 : 0,
+        onEnter: f.clip ? () => this.setState({ filmHover: f.num }) : undefined,
+        onLeave: f.clip ? () => this.setState({ filmHover: null }) : undefined,
+      })),
+      playerOpen: !!p,
+      playerTitle: p ? p.title : "",
+      playerHasVideo: !!(p && p.ytId),
+      playerNoVideo: !!(p && !p.ytId),
+      playerSrc: p && p.ytId ? `https://www.youtube-nocookie.com/embed/${p.ytId}?autoplay=1` : "",
+      closePlayer: () => this.setState({ player: null }),
+      stopProp: (e) => e.stopPropagation(),
+    };
+  }
+}
+</script>
+</body>
+</html>

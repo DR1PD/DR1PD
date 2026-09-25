@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,400&amp;family=Fragment+Mono:wght@400;500&amp;family=Public+Sans:wght@300;400&amp;display=swap" rel="stylesheet">
+<style>
+  html, body { margin: 0; padding: 0; background: #05070d; }
+  a { color: #e9edf7; } a:hover { color: #8fb0ff; }
+</style>
+</helmet>
+
+<div style="min-height:100vh; background:#05070d; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:3rem; padding:3rem 1.5rem; box-sizing:border-box;">
+
+  <!-- FRONT — 3.5in × 2in at 300px/in -->
+  <div style="display:flex; flex-direction:column; gap:0.8rem; align-items:center;">
+    <span style="font-family:'Fragment Mono',monospace; font-size:0.6rem; letter-spacing:0.3em; text-transform:uppercase; color:#5c6885;">Front · 3.5 × 2 in</span>
+    <div data-screen-label="Card front" style="width:1050px; height:600px; transform:scale(0.62); transform-origin:top center; margin-bottom:-228px; background:radial-gradient(ellipse at 30% 20%, #0c1226 0%, #05070d 70%); border:1px solid rgba(136,160,220,0.12); position:relative; overflow:hidden; display:flex; flex-direction:column; align-items:center; justify-content:center; box-sizing:border-box;">
+      <!-- faint corner glow -->
+      <span style="position:absolute; top:-20%; left:-10%; width:60%; height:70%; background:radial-gradient(circle at center, rgba(110,140,255,0.10), transparent 65%); filter:blur(40px);"></span>
+
+      <!-- address + anatomy, same grid as the index-page contact card -->
+      <div style="position:relative; display:inline-grid; grid-template-columns:auto auto auto auto; justify-content:center; align-items:start; font-family:'Fragment Mono',monospace; font-size:17px; letter-spacing:0.3em; text-transform:uppercase; color:#5c6885;">
+        <!-- row 1: the address, split into segments -->
+        <span style="grid-column:1/2; grid-row:1; font-family:'Cormorant Garamond',serif; letter-spacing:normal; text-transform:none; font-size:120px; line-height:1; color:#e9edf7; font-variant-numeric:lining-nums;">D</span>
+        <span style="grid-column:2/3; grid-row:1; font-family:'Cormorant Garamond',serif; letter-spacing:normal; text-transform:none; font-size:120px; line-height:1; color:#93a0bf;">@</span>
+        <span style="grid-column:3/4; grid-row:1; font-family:'Cormorant Garamond',serif; letter-spacing:normal; text-transform:none; font-size:120px; line-height:1; color:#e9edf7; font-variant-numeric:lining-nums;">DR1PD</span>
+        <span style="grid-column:4/5; grid-row:1; font-family:'Cormorant Garamond',serif; letter-spacing:normal; text-transform:none; font-size:120px; line-height:1; color:#93a0bf;">.com</span>
+
+        <!-- row 2: ME (under D) + SOCIALS logos (under @DR1PD) -->
+        <div style="grid-column:1/2; grid-row:2; padding-top:26px; margin-right:22px;">
+          <div style="height:14px; border-left:1px solid #3d4a6b; border-right:1px solid #3d4a6b; border-bottom:1px solid #3d4a6b;"></div>
+          <div style="text-align:center; margin-top:10px;">Me</div>
+        </div>
+        <div style="grid-column:2/4; grid-row:2; padding-top:26px;">
+          <div style="height:14px; border-left:1px solid #3d4a6b; border-right:1px solid #3d4a6b; border-bottom:1px solid #3d4a6b;"></div>
+          <div style="margin-top:10px; display:flex; justify-content:center; align-items:center; gap:26px;">
+            <img src="social-ig-sq.png" alt="Instagram" style="width:24px; height:24px; opacity:0.75;">
+            <img src="social-yt-sq.png" alt="YouTube" style="width:24px; height:24px; opacity:0.75;">
+            <img src="social-li-sq.png" alt="LinkedIn" style="width:24px; height:24px; opacity:0.75;">
+            <img src="social-gh-sq.png" alt="GitHub" style="width:24px; height:24px; opacity:0.75;">
+          </div>
+        </div>
+
+        <!-- row 3: WEBSITE (under DR1PD.com) -->
+        <div style="grid-column:3/5; grid-row:3; padding-top:18px;">
+          <div style="height:14px; border-left:1px solid #3d4a6b; border-right:1px solid #3d4a6b; border-bottom:1px solid #3d4a6b;"></div>
+          <div style="text-align:center; margin-top:10px;">Website</div>
+        </div>
+
+        <!-- row 4: EMAIL (full width) -->
+        <div style="grid-column:1/5; grid-row:4; padding-top:18px;">
+          <div style="height:14px; border-left:1px solid #3d4a6b; border-right:1px solid #3d4a6b; border-bottom:1px solid #3d4a6b;"></div>
+          <div style="text-align:center; margin-top:10px;">Email</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BACK -->
+  <div style="display:flex; flex-direction:column; gap:0.8rem; align-items:center;">
+    <span style="font-family:'Fragment Mono',monospace; font-size:0.6rem; letter-spacing:0.3em; text-transform:uppercase; color:#5c6885;">Back · 3.5 × 2 in</span>
+    <div data-screen-label="Card back" style="width:1050px; height:600px; transform:scale(0.62); transform-origin:top center; margin-bottom:-228px; background:linear-gradient(135deg, #05070d 0%, #0b1330 42%, #16224e 68%, #0a0f1e 100%); border:1px solid rgba(136,160,220,0.12); position:relative; overflow:hidden; box-sizing:border-box;">
+      <!-- soft aura behind the line -->
+      <span style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:70%; height:60%; background:radial-gradient(ellipse at center, rgba(110,140,255,0.16) 0%, rgba(140,110,255,0.06) 50%, transparent 72%); filter:blur(36px);"></span>
+
+      <!-- name, matching the front address position exactly, with the dotted orb globe beside it -->
+      <div style="position:absolute; top:139px; left:150px; display:flex; align-items:flex-start; gap:56px;">
+        <div style="font-family:'Cormorant Garamond',serif; font-weight:400; font-size:120px; line-height:1.1; color:#e9edf7; text-align:left; text-rendering:optimizeLegibility;">DAVID<br>COLINDRES</div><canvas id="cardOrbStill" ref="{{ orbRef }}" width="600" height="600" style="width:300px; height:300px; margin:-18px; pointer-events:none;"></canvas>
+        
+      </div>
+
+      <div style="position:absolute; bottom:112px; left:0; right:0; text-align:center; font-family:'Public Sans',system-ui,sans-serif; font-weight:300; font-size:19px; letter-spacing:0.02em; color:#5c6885;">B.S./M.S., Industrial &amp; Systems Engineering • M.A., Econometrics</div>
+
+      <div style="position:absolute; bottom:34px; left:0; right:0; text-align:center; font-family:'Cormorant Garamond',serif; font-style:italic; font-size:15px; letter-spacing:0.14em; text-indent:0.14em; color:#5c6885; font-variant-numeric:lining-nums;">The world is <span style="text-decoration:underline; text-underline-offset:4px;">your</span> playground.</div>
+    </div>
+  </div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  renderVals() { return { orbRef: (el) => this.drawOrb(el) }; }
+
+  componentDidMount() {
+    this.drawOrb(document.getElementById("cardOrbStill"));
+  }
+
+  drawOrb(canvas) {
+    // same dotted orb as the site's intro / bucket-list globe — rendered ONCE as a still
+    if (!canvas || canvas.dataset.running) return;
+    canvas.dataset.running = "still";
+    const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const ctx = canvas.getContext("2d");
+    const W = canvas.width, H = canvas.height, CX = W / 2, CY = H / 2, R = W * 0.4;
+    const speed = 9;
+
+    const DOTS = [];
+    const RINGS = 26, COUNT = 900;
+    for (let ring = 0; ring < RINGS; ring++) {
+      const phi = (Math.PI / (RINGS + 1)) * (ring + 1);
+      const rr = Math.sin(phi);
+      const n = Math.max(4, Math.round((COUNT / RINGS) * rr * 1.6));
+      for (let i = 0; i < n; i++) {
+        const theta = (Math.PI * 2 / n) * i + ring * 0.3;
+        DOTS.push({
+          phi, theta,
+          size: 0.8 + Math.random() * 1.2,
+          pp: Math.random() * Math.PI * 2,
+          os: 0.12 + Math.random() * 0.2,
+          oa: 0.004 + Math.random() * 0.01,
+        });
+      }
+    }
+
+    const rY = (x, y, z, a) => { const c = Math.cos(a), s = Math.sin(a); return [x * c + z * s, y, -x * s + z * c]; };
+    const rX = (x, y, z, a) => { const c = Math.cos(a), s = Math.sin(a); return [x, y * c - z * s, y * s + z * c]; };
+
+    let t = 0;
+    const frame = () => {
+      t += 0.016;
+      ctx.clearRect(0, 0, W, H);
+      const rotY = t * 0.1 * speed, rotX = Math.sin(t * 0.07) * 0.25 + 0.42;
+      const proj = [];
+      for (const d of DOTS) {
+        const th = d.theta + Math.sin(t * d.os + d.pp) * d.oa;
+        const ph = d.phi + Math.cos(t * d.os * 0.7 + d.pp) * d.oa * 0.5;
+        let x = Math.sin(ph) * Math.cos(th), y = Math.cos(ph), z = Math.sin(ph) * Math.sin(th);
+        [x, y, z] = rY(x, y, z, rotY);
+        [x, y, z] = rX(x, y, z, rotX);
+        const per = 1 + z * 0.28;
+        const breath = 0.92 + 0.08 * Math.sin(t * 0.9 + d.pp);
+        proj.push({
+          sx: CX + x * R * per, sy: CY + y * R * per, z,
+          a: Math.min(0.85, (0.12 + (z + 1) * 0.26) * breath),
+          l: 60 + z * 14,
+          s: d.size * per * breath * 2.2,
+        });
+      }
+      proj.sort((a, b) => a.z - b.z);
+      for (const p of proj) {
+        ctx.beginPath();
+        ctx.arc(p.sx, p.sy, p.s, 0, Math.PI * 2);
+        ctx.fillStyle = `hsla(224, 55%, ${p.l}%, ${p.a})`;
+        ctx.fill();
+      }
+    };
+    t = 4.2; // fixed pose — still digital asset, no rotation
+    frame();
+  }
+}
+</script>
+</body>
+</html>

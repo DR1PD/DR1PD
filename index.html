@@ -92,9 +92,7 @@
     * { -webkit-tap-highlight-color: transparent; }
     [data-mq="dl"] { opacity: 1 !important; transform: none !important; }
     [data-mq="switch"]:not([data-card]) { padding: 12px !important; margin: -12px !important; box-sizing: content-box !important; }
-    /* contact card on phones: scale the whole card up to fill the width; popovers push the row below instead of overlapping it */
-    [data-mq="card"] { transform: scale(var(--card-scale, 1.55)); transform-origin: top center; }
-    [data-mq="card-wrap"] { min-height: calc(var(--card-h, 240px) * var(--card-scale, 1.55)); }
+    /* popovers push the row below instead of overlapping it */
     [data-mq="pop"] { position: static !important; transform: none !important; display: flex !important; justify-content: center !important; padding: 8px 0 4px !important; }
     [data-mq="pop"][data-open="false"] { display: none !important; }
     [data-mq="cardlabel"] { opacity: 1 !important; }
@@ -605,26 +603,12 @@ class Component extends DCLogic {
   }
 
   _touch() { return matchMedia("(hover: none)").matches; }
-  // phones: scale the contact card to fill the viewport width (desktop untouched — the CSS var only applies under hover:none)
-  _fitCard() {
-    const card = document.querySelector('[data-mq="card"]'), wrap = document.querySelector('[data-mq="card-wrap"]');
-    if (!card || !wrap || !this._touch()) return;
-    const prev = card.style.transform; card.style.transform = "none";
-    const w = card.offsetWidth, h = card.offsetHeight; card.style.transform = prev;
-    if (!w) return;
-    const avail = wrap.clientWidth - 2 * parseFloat(getComputedStyle(wrap).paddingLeft);
-    const scale = Math.max(1, Math.min(avail / w, 2.2));
-    wrap.style.setProperty("--card-scale", scale.toFixed(3));
-    wrap.style.setProperty("--card-h", h + "px");
-  }
   setZone(z) {
     clearTimeout(this._zoneT);
     this.setState({ zone: z });
   }
 
   componentDidMount() {
-    this._fitCard(); setTimeout(() => this._fitCard(), 300); setTimeout(() => this._fitCard(), 1200);
-    this._onResize = () => this._fitCard(); window.addEventListener("resize", this._onResize);
     // Escape closes whichever window is open
     this._escClose = (e) => {
       if (e.key !== "Escape") return;
@@ -714,7 +698,6 @@ class Component extends DCLogic {
   componentDidUpdate() {
     const open = this.state.bucketOpen || this.state.achOpen || this.state.countriesOpen;
     document.body.style.overflow = open ? "hidden" : "";
-    this._fitCard();
   }
 
   startGlobe() {

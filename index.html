@@ -92,9 +92,9 @@
     * { -webkit-tap-highlight-color: transparent; }
     [data-mq="dl"] { opacity: 1 !important; transform: none !important; }
     [data-mq="switch"]:not([data-card]) { padding: 12px !important; margin: -12px !important; box-sizing: content-box !important; }
-    /* popovers push the row below instead of overlapping it */
-    [data-mq="pop"] { position: static !important; transform: none !important; display: flex !important; justify-content: center !important; padding: 8px 0 4px !important; }
-    [data-mq="pop"][data-open="false"] { display: none !important; }
+    /* popovers overlay the row below exactly like desktop hover; tap toggles visibility */
+    [data-mq="pop"][data-open="true"] { opacity: 1 !important; pointer-events: auto !important; }
+    [data-mq="pop"][data-open="false"] { opacity: 0 !important; pointer-events: none !important; }
     [data-mq="cardlabel"] { opacity: 1 !important; }
     [role="button"][aria-label="Close"] { padding: 0.7rem 0.9rem !important; }
   }

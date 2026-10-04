@@ -1,16 +1,41 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="utf-8">
+<title>C</title>
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="DR1PD">
+<meta property="og:title" content="DR1PD">
+<meta property="og:description" content="Designing a life worth documenting.">
+<meta property="og:url" content="https://www.dr1pd.com/c">
+<meta property="og:image" content="https://www.dr1pd.com/share-card.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="DR1PD">
+<meta name="twitter:description" content="Designing a life worth documenting.">
+<meta name="twitter:image" content="https://www.dr1pd.com/share-card.png">
+<link rel="canonical" href="https://www.dr1pd.com/c">
+<script>addEventListener("unhandledrejection",function(e){var m=e.reason&&(e.reason.message||e.reason.name||"")+"";if(e.reason&&(e.reason.name==="AbortError"||/transition was skipped/i.test(m)))e.preventDefault();});</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="preconnect" href="https://unpkg.com" crossorigin="anonymous">
+<script src="https://unpkg.com/react@18.3.1/umd/react.production.min.js" integrity="sha384-DGyLxAyjq0f9SPpVevD6IgztCFlnMF6oW/XQGmfe+IsZ8TqEiDrcHkMLKI6fiB/Z" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js" integrity="sha384-gTGxhz21lVGYNMcdJOyq01Edg0jhn/c22nsx0kyqP0TxaV5WVdsSH1fSDUf5YJj1" crossorigin="anonymous"></script>
+<script>/* first React commit is synchronous, so the page is fully drawn before its first paint (needed for a true cross-page crossfade) */(function(){var RD=window.ReactDOM;if(!RD||!RD.createRoot||!RD.flushSync)return;var cr=RD.createRoot;RD.createRoot=function(){var root=cr.apply(RD,arguments),r=root.render,first=true;root.render=function(el){if(first){first=false;return RD.flushSync(function(){return r.call(root,el);});}return r.call(root,el);};return root;};})();</script>
+<link rel="expect" href="#dc-end" blocking="render">
 <script src="/support.js"></script>
 </head>
 <body>
 <x-dc>
 <helmet>
+<link rel="icon" type="image/png" sizes="64x64" href="/favicon.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<meta name="theme-color" content="#06070c">
+<script src="https://cdn.jsdelivr.net/npm/three@0.147.0/build/three.min.js" defer></script>
+<script src="/glass-surface.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,400&amp;family=Fragment+Mono&amp;family=Public+Sans:wght@300;400;500&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,400&amp;family=Public+Sans:wght@300;400;500&amp;family=IBM+Plex+Mono:wght@500;600&amp;display=swap" rel="stylesheet">
 <style>
   html, body { margin: 0; padding: 0; background: #05070d; }
   body {
@@ -77,6 +102,28 @@
     [data-mq="resume-body"] { grid-template-columns: 1fr !important; }
     [data-mq="hero-row"] { flex-wrap: wrap !important; gap: 1.2rem !important; }
   }
+
+  /* ---- liquid glass: borderless pane, rim light, SVG refraction (glass-surface.js) + pointer specular ---- */
+  [data-glass] { isolation: isolate; border-color: transparent !important; }
+  html[data-glass-fx="svg"] [data-glass] { -webkit-backdrop-filter: url(#dr1pd-glass) blur(10px) saturate(1.5) brightness(1.06) !important; backdrop-filter: url(#dr1pd-glass) blur(10px) saturate(1.5) brightness(1.06) !important; }
+  [data-glass]::before { content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; z-index: -1;
+    box-shadow: inset 1px 1px 0 0 rgba(255,255,255,0.09), inset -1px -1px 0 0 rgba(255,255,255,0.025), inset 0 0 0 1px rgba(255,255,255,0.035);
+    background: linear-gradient(135deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0) 30%, rgba(255,255,255,0) 70%, rgba(255,255,255,0.015) 100%); }
+  [data-glass]::after { content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; z-index: -1; opacity: 0;
+    background: radial-gradient(260px circle at var(--gx, 50%) var(--gy, 0%), rgba(170,195,255,0.08), rgba(170,195,255,0) 70%);
+    transition: opacity 0.45s cubic-bezier(0.22, 1, 0.36, 1); }
+  [data-glass]:hover::after { opacity: 1; }
+  @media (hover: none) { [data-glass]::after { display: none; } }
+  @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) { [data-glass] { background: rgba(10,15,27,0.9) !important; } }
+
+  html, body { background: #05070d; }
+  /* ---- keyboard focus: periwinkle ring, keyboard-only (mouse clicks never show it) ---- */
+  :focus { outline: none; }
+  :focus-visible { outline: 1px solid #8fb0ff; outline-offset: 3px; border-radius: 2px; box-shadow: 0 0 0 4px rgba(143,176,255,0.14); }
+  /* ---- page navigation: browser-native soft cross-fade between pages (no JS, zero added latency) ---- */
+  @view-transition { navigation: auto; }
+  ::view-transition-old(root), ::view-transition-new(root) { animation-duration: 0.28s; animation-timing-function: ease-in-out; }
+  @media (prefers-reduced-motion: reduce) { ::view-transition-old(root), ::view-transition-new(root) { animation: none; } }
   /* ---- phone additions: tap targets, windows, text ---- */
   @media (max-width: 840px) {
     [data-mq="nav"] { gap: 1.1rem !important; }
@@ -142,6 +189,10 @@
 <div style="min-height:100vh; background:#05070d; color:#e9edf7; font-family:'Public Sans',system-ui,sans-serif; font-weight:300; line-height:1.65;">
 
   <!-- ambient drifting glow -->
+  <!-- prism backdrop: verbatim Prism shader, screen-blended at low opacity so only its bright streaks read as glow -->
+  <div aria-hidden="true" style="position:fixed; inset:0; z-index:0; pointer-events:none; overflow:hidden; opacity:0.16;">
+    <x-import component-from-global-scope="prism-backdrop" from="/prism-backdrop.js" style="position:absolute; inset:0; width:100%; height:100%;" hint-size="100%,100%"></x-import>
+  </div>
   <div aria-hidden="true" style="position:fixed; inset:0; z-index:0; pointer-events:none; overflow:hidden;">
     <span style="position:absolute; top:8%; left:18%; width:55vw; height:55vw; background:radial-gradient(circle at center, rgba(110,140,255,0.5), transparent 65%); filter:blur(70px); animation:ambientA 52s ease-in-out infinite;"></span>
     <span style="position:absolute; bottom:5%; right:12%; width:48vw; height:48vw; background:radial-gradient(circle at center, rgba(217,199,160,0.24), transparent 65%); filter:blur(70px); animation:ambientB 64s ease-in-out infinite;"></span>
@@ -154,9 +205,9 @@
   <header style="position:fixed; top:0; left:0; right:0; z-index:100; display:flex; align-items:center; justify-content:space-between; padding:1.1rem clamp(1.25rem,4vw,3rem); background:rgba(5,7,13,0.72); backdrop-filter:blur(12px); border-bottom:1px solid rgba(136,160,220,0.10);">
     <a href="/" style="font-family:'Cormorant Garamond',serif; font-size:1.2rem; font-weight:500; letter-spacing:0.18em; text-decoration:none; color:#e9edf7; font-variant-numeric:lining-nums;">DR1PD</a>
     <nav data-mq="nav" style="display:flex; gap:2rem; align-items:center;">
-      <a href="/q/" style="font-family:'Fragment Mono',monospace; font-size:0.66rem; letter-spacing:0.18em; text-transform:uppercase; color:#93a0bf; text-decoration:none;" style-hover="color:#e9edf7;">Quant</a>
-      <a href="/c/" style="font-family:'Fragment Mono',monospace; font-size:0.66rem; letter-spacing:0.18em; text-transform:uppercase; color:#e9edf7; text-decoration:none; border-bottom:1px solid #8fb0ff; padding-bottom:2px;">Create</a>
-      <a href="/r/" style="font-family:'Fragment Mono',monospace; font-size:0.66rem; letter-spacing:0.18em; text-transform:uppercase; color:#e9edf7; text-decoration:none; border:1px solid rgba(136,160,220,0.28); border-radius:2px; padding:0.45rem 1rem;" style-hover="border-color:#8fb0ff; color:#8fb0ff;">Résumé</a>
+      <a href="/q" style="font-family:-apple-system,BlinkMacSystemFont,system-ui,'Segoe UI',Roboto,'Noto Sans',Helvetica,Arial,sans-serif; font-size:0.8rem; letter-spacing:0.04em; color:#93a0bf; text-decoration:none;" style-hover="color:#e9edf7;">Quant</a>
+      <a href="/c" style="font-family:-apple-system,BlinkMacSystemFont,system-ui,'Segoe UI',Roboto,'Noto Sans',Helvetica,Arial,sans-serif; font-size:0.8rem; letter-spacing:0.04em; color:#e9edf7; text-decoration:none; border-bottom:1px solid #8fb0ff; padding-bottom:2px;">Create</a>
+      <a href="/r" style="font-family:-apple-system,BlinkMacSystemFont,system-ui,'Segoe UI',Roboto,'Noto Sans',Helvetica,Arial,sans-serif; font-size:0.8rem; letter-spacing:0.04em; color:#e9edf7; text-decoration:none; border:1px solid rgba(136,160,220,0.28); border-radius:2px; padding:0.45rem 1rem;" style-hover="border-color:#8fb0ff; color:#8fb0ff;">Résumé</a>
     </nav>
   </header>
 
@@ -172,21 +223,21 @@
   <section data-screen-label="Featured film" style="padding:1rem clamp(1.25rem,4vw,3rem) 4rem;">
     <div style="max-width:1020px; margin:0 auto;">
       <div style="text-align:center; margin-bottom:1.4rem;">
-        <span style="font-family:'Fragment Mono',monospace; font-size:0.62rem; letter-spacing:0.3em; text-transform:uppercase; color:#8fb0ff;">Featuring</span>
+        <span style="font-family:-apple-system,BlinkMacSystemFont,system-ui,'Segoe UI',Roboto,'Noto Sans',Helvetica,Arial,sans-serif; font-size:0.74rem; letter-spacing:0.06em; color:#8fb0ff;">Featuring</span>
       </div>
 
       <!-- Swap this div for the YouTube iframe when the video ID exists:
            <iframe src="https://www.youtube-nocookie.com/embed/VIDEO_ID" title="?GROUNDZERO?" style="width:100%; aspect-ratio:16/9; border:0;" allowfullscreen></iframe> -->
-      <div style-hover="border-color:#8fb0ff; box-shadow:0 0 24px rgba(143,176,255,0.12);" style="position:relative; width:100%; aspect-ratio:16/9; border:1px solid rgba(136,160,220,0.15); transition:border-color 0.25s ease, background 0.25s ease, box-shadow 0.25s ease; background:radial-gradient(ellipse at center, #0b1220 0%, #05070d 80%); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:0.8rem;">
+      <div style-hover="border-color:#8fb0ff; box-shadow:0 0 24px rgba(143,176,255,0.12);" style="position:relative; width:100%; aspect-ratio:16/9; border:1px solid rgba(136,160,220,0.15); border-radius:10px; overflow:hidden; transition:border-color 0.25s ease, background 0.25s ease, box-shadow 0.25s ease; background:radial-gradient(ellipse at center, #0b1220 0%, #05070d 80%); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:0.8rem;">
         <span data-mq="feature-title" style="font-family:'Cormorant Garamond',serif; font-size:clamp(2rem,5vw,3.4rem); letter-spacing:0.06em; color:#e9edf7;">?GROUNDZERO?</span>
-        <span data-mq="feature-cap" style="font-family:'Fragment Mono',monospace; font-size:0.6rem; letter-spacing:0.3em; text-transform:uppercase; color:#5c6885;">Coming soon</span>
+        <span data-mq="feature-cap" style="font-family:-apple-system,BlinkMacSystemFont,system-ui,'Segoe UI',Roboto,'Noto Sans',Helvetica,Arial,sans-serif; font-size:0.72rem; letter-spacing:0.05em; color:#5c6885;">Coming soon</span>
       </div>
 
       <!-- Channel link -->
       <a href="https://www.youtube.com/@dr1pd" target="_blank" rel="noopener" onMouseEnter="{{ enterYt }}" onMouseLeave="{{ leaveYt }}" style="display:flex; width:fit-content; align-items:center; justify-content:center; gap:0.9rem; margin:1.6rem auto 0; text-decoration:none; color:inherit; padding-bottom:5px; background-image:linear-gradient(#8fb0ff,#8fb0ff); background-repeat:no-repeat; background-position:left bottom; background-size:{{ ytEnterSize }}; transition:background-size 0.25s ease-out;">
         <svg width="22" height="16" viewBox="0 0 22 16" aria-hidden="true"><rect x="0.5" y="0.5" width="21" height="15" rx="3.5" fill="none" stroke="#8fb0ff" stroke-width="1"></rect><path d="M9 4.8 L14.2 8 L9 11.2 Z" fill="#8fb0ff"></path></svg>
         <span style="font-family:'Cormorant Garamond',serif; font-size:1.15rem; letter-spacing:0.16em; font-variant-numeric:lining-nums;">DR1PD</span>
-        <span style="font-family:'Fragment Mono',monospace; font-size:0.6rem; letter-spacing:0.2em; text-transform:uppercase; color:{{ ytSubColor }}; transition:color 0.2s ease;">on YouTube →</span>
+        <span style="font-family:-apple-system,BlinkMacSystemFont,system-ui,'Segoe UI',Roboto,'Noto Sans',Helvetica,Arial,sans-serif; font-size:0.72rem; letter-spacing:0.05em; color:{{ ytSubColor }}; transition:color 0.2s ease;">on YouTube →</span>
       </a>
     </div>
   </section>
@@ -199,7 +250,7 @@
         <p style="margin:0; max-width:34rem; color:#93a0bf; font-size:0.9rem;">Ten films, told in order. Each unlocks when ready.</p>
       </div>
 
-      <div data-mq="films" style="display:grid; grid-template-columns:repeat(5, 1fr); gap:1px; background:rgba(136,160,220,0.13); border:1px solid rgba(136,160,220,0.13);">
+      <div data-mq="films" style="display:grid; grid-template-columns:repeat(5, 1fr); gap:1px; background:rgba(136,160,220,0.13); border:1px solid rgba(136,160,220,0.13); border-radius:10px; overflow:hidden;">
         <sc-for list="{{ films }}" as="film" hint-placeholder-count="10">
           <a href="{{ film.href }}" target="_blank" rel="noopener" aria-label="{{ film.aria }}" onMouseEnter="{{ film.onEnter }}" onMouseLeave="{{ film.onLeave }}" style="position:relative; overflow:hidden; aspect-ratio:1/1; background:{{ film.bg }}; display:flex; flex-direction:column; justify-content:flex-end; padding:1.1rem; transition:background 0.3s ease; text-decoration:none; color:inherit; cursor:{{ film.cursor }};" style-hover="background:#0b1220;">
             <sc-if value="{{ film.clip1 }}" hint-placeholder-val="{{ false }}">
@@ -212,7 +263,7 @@
             </sc-if>
             <div style="position:relative;">
               <span style="display:block; font-family:'Cormorant Garamond',serif; font-size:0.98rem; letter-spacing:0.05em; line-height:1.3; color:{{ film.titleColor }};">{{ film.title }}</span>
-              <span style="display:{{ film.statusDisplay }}; margin-top:0.3rem; font-family:'Fragment Mono',monospace; font-size:0.52rem; letter-spacing:0.16em; text-transform:uppercase; color:#5c6885;">{{ film.status }}</span>
+              <span style="display:{{ film.statusDisplay }}; margin-top:0.3rem; font-family:-apple-system,BlinkMacSystemFont,system-ui,'Segoe UI',Roboto,'Noto Sans',Helvetica,Arial,sans-serif; font-size:0.62rem; letter-spacing:0.03em; color:#5c6885;">{{ film.status }}</span>
               <svg width="11" height="13" viewBox="0 0 9 11" aria-label="Locked" style="display:{{ film.lockDisplay }}; margin-top:0.3rem; opacity:0.55;">
                 <path d="M2.4 4.4 V2.9 a2.1 2.1 0 0 1 4.2 0 V4.4" fill="none" stroke="#8fb0ff" stroke-width="1"></path>
                 <rect x="1" y="4.4" width="7" height="5.6" rx="1" fill="none" stroke="#8fb0ff" stroke-width="1"></rect>
@@ -227,26 +278,19 @@
 
   <!-- WDIYP -->
   <section data-screen-label="WDIYP" style="padding:4rem clamp(1.25rem,4vw,3rem) 5rem; text-align:center; position:relative; overflow:hidden;">
-    <a data-reveal="true" href="https://wdiyp.com" target="_blank" rel="noopener" style="position:relative; display:flex; align-items:center; justify-content:center; width:min(90vw,620px); height:min(90vw,620px); margin:0 auto; text-decoration:none;">
+    <a data-reveal="true" href="https://wdiyp.com" target="_blank" rel="noopener" aria-label="WDIYP.com — The world is your playground" style="position:relative; display:block; width:100vw; height:min(38vw,440px); margin:0 auto; text-decoration:none; cursor:pointer;">
       <!-- layered, slow-breathing glow -->
-      <span style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:88%; height:62%; background:radial-gradient(ellipse at center, rgba(110,140,255,0.18) 0%, rgba(140,110,255,0.07) 45%, transparent 72%); filter:blur(30px); animation:aura 7s ease-in-out infinite; pointer-events:none;"></span>
-      <span style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:46%; height:26%; background:radial-gradient(ellipse at center, rgba(220,230,255,0.12), transparent 70%); filter:blur(20px); animation:auraInner 4.6s ease-in-out infinite; pointer-events:none;"></span>
-      <!-- static fuzz ring -->
-      <span aria-hidden="true" style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:74%; height:44%; background-image:url('data:image/svg+xml;utf8,&lt;svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22140%22 height=%22140%22&gt;&lt;filter id=%22n%22&gt;&lt;feTurbulence type=%22fractalNoise%22 baseFrequency=%220.9%22 numOctaves=%222%22 stitchTiles=%22stitch%22/&gt;&lt;/filter&gt;&lt;rect width=%22140%22 height=%22140%22 filter=%22url(%23n)%22 opacity=%220.9%22/&gt;&lt;/svg&gt;'); mix-blend-mode:screen; opacity:0.14; -webkit-mask-image:radial-gradient(ellipse at center, transparent 32%, rgba(0,0,0,0.9) 55%, transparent 78%); mask-image:radial-gradient(ellipse at center, transparent 32%, rgba(0,0,0,0.9) 55%, transparent 78%); animation:staticFuzz 0.45s steps(3) infinite; pointer-events:none;"></span>
-      <span style="position:relative; display:block;">
-        <span style="display:block; font-family:'Cormorant Garamond',serif; font-size:clamp(2.4rem,6vw,4.2rem); letter-spacing:0.08em; line-height:1; color:#e9edf7; text-shadow:0 0 22px rgba(143,176,255,0.5), 0 0 60px rgba(95,125,255,0.25);">WDIYP.com</span>
-        <span aria-hidden="true" style="position:absolute; inset:0; display:block; font-family:'Cormorant Garamond',serif; font-size:clamp(2.4rem,6vw,4.2rem); letter-spacing:0.08em; line-height:1; color:#8fb0ff; animation:glitchA 6s steps(1) infinite; pointer-events:none;">WDIYP.com</span>
-        <span aria-hidden="true" style="position:absolute; inset:0; display:block; font-family:'Cormorant Garamond',serif; font-size:clamp(2.4rem,6vw,4.2rem); letter-spacing:0.08em; line-height:1; color:#b79bff; animation:glitchB 7.3s steps(1) infinite; pointer-events:none;">WDIYP.com</span>
-        <span style="display:block; margin-top:1rem; font-family:'Fragment Mono',monospace; font-size:0.6rem; letter-spacing:0.32em; text-transform:uppercase; color:#5c6885;">The world is your playground.</span>
-      </span>
+      <span style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:88%; height:70%; background:radial-gradient(ellipse at center, rgba(110,140,255,0.18) 0%, rgba(140,110,255,0.07) 45%, transparent 72%); filter:blur(30px); animation:aura 7s ease-in-out infinite; pointer-events:none;"></span>
+      <!-- ASCII wordmark (React Bits ASCIIText port, three.js) -->
+      <x-import component-from-global-scope="ascii-text" from="/ascii-text.js" text="WDIYP.com" ascii-font-size="8" text-font-size="200" plane-base-height="8" text-color="#e9edf7" hue-range="0.12" style="position:absolute; inset:0;" hint-size="100%,100%"></x-import>
     </a>
   </section>
 
   <!-- Cross-link -->
   <section data-screen-label="Cross-link" style="padding:2.5rem clamp(1.25rem,4vw,3rem) 3rem; text-align:center;">
     <div style="display:flex; gap:2.5rem; justify-content:center;">
-      <a href="/q/" style="font-family:'Fragment Mono',monospace; font-size:0.7rem; letter-spacing:0.24em; text-transform:uppercase; color:#e9edf7; text-decoration:none; padding-bottom:5px; border-bottom:1px solid rgba(136,160,220,0.35);" style-hover="color:#8fb0ff; border-color:#8fb0ff;">Quant</a>
-      <a href="/r/" style="font-family:'Fragment Mono',monospace; font-size:0.7rem; letter-spacing:0.24em; text-transform:uppercase; color:#e9edf7; text-decoration:none; padding-bottom:5px; border-bottom:1px solid rgba(136,160,220,0.35);" style-hover="color:#8fb0ff; border-color:#8fb0ff;">Résumé</a>
+      <a href="/q" style="font-family:-apple-system,BlinkMacSystemFont,system-ui,'Segoe UI',Roboto,'Noto Sans',Helvetica,Arial,sans-serif; font-size:0.86rem; letter-spacing:0.05em; color:#e9edf7; text-decoration:none; padding-bottom:5px; border-bottom:1px solid rgba(136,160,220,0.35);" style-hover="color:#8fb0ff; border-color:#8fb0ff;">Quant</a>
+      <a href="/r" style="font-family:-apple-system,BlinkMacSystemFont,system-ui,'Segoe UI',Roboto,'Noto Sans',Helvetica,Arial,sans-serif; font-size:0.86rem; letter-spacing:0.05em; color:#e9edf7; text-decoration:none; padding-bottom:5px; border-bottom:1px solid rgba(136,160,220,0.35);" style-hover="color:#8fb0ff; border-color:#8fb0ff;">Résumé</a>
     </div>
   </section>
 
@@ -254,8 +298,8 @@
   <footer style="border-top:1px solid rgba(136,160,220,0.10); padding:1.6rem clamp(1.25rem,4vw,3rem); display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:0.8rem;">
     <span style="font-family:'Cormorant Garamond',serif; font-style:italic; font-size:0.9rem; color:#5c6885; font-variant-numeric:lining-nums;">© 2026 DR1PD</span>
     <div style="display:flex; gap:0.6rem;">
-      <a href="https://www.linkedin.com/in/dr1pd/" target="_blank" rel="noopener" aria-label="LinkedIn" style="width:30px; height:30px; display:flex; align-items:center; justify-content:center; text-decoration:none;" style-hover="opacity:1;"><img src="/social-li-sq.png" alt="" style="width:24px; height:24px; opacity:0.7;"></a>
-      <a href="https://github.com/dr1pd" target="_blank" rel="noopener" aria-label="GitHub" style="width:30px; height:30px; display:flex; align-items:center; justify-content:center; text-decoration:none;" style-hover="opacity:1;"><img src="/social-gh-sq.png" alt="" style="width:24px; height:24px; opacity:0.7;"></a>
+      <a href="https://www.linkedin.com/in/dr1pd/" target="_blank" rel="noopener" aria-label="LinkedIn" style="width:30px; height:30px; display:flex; align-items:center; justify-content:center; text-decoration:none;" style-hover="opacity:1;"><img loading="lazy" decoding="async" src="/social-li-sq.png" alt="" style="width:24px; height:24px; opacity:0.7;"></a>
+      <a href="https://github.com/dr1pd" target="_blank" rel="noopener" aria-label="GitHub" style="width:30px; height:30px; display:flex; align-items:center; justify-content:center; text-decoration:none;" style-hover="opacity:1;"><img loading="lazy" decoding="async" src="/social-gh-sq.png" alt="" style="width:24px; height:24px; opacity:0.7;"></a>
     </div>
   </footer>
 </div>
@@ -265,34 +309,70 @@ class Component extends DCLogic {
   state = { player: null };
 
   componentDidMount() {
+    // keyboard access: every role="button" becomes Tab-reachable and fires on Enter/Space; Esc clicks any open window's Close
+    this._a11yTag = () => {
+      document.querySelectorAll('[role="button"]:not([tabindex])').forEach((el) => el.setAttribute('tabindex', '0'));
+      // hover-only pop-ups stay out of the Tab order while hidden
+      document.querySelectorAll('[data-mq="pop"]').forEach((p) => p.querySelectorAll('a,[role="button"]').forEach((el) => el.setAttribute('tabindex', p.getAttribute('data-open') === 'true' ? '0' : '-1')));
+      // a newly opened window takes focus on its Close ×; remember what opened it so focus returns on close
+      const close = document.querySelector('[role="button"][aria-label="Close"]');
+      if (close && this._a11yLastClose !== close) { this._a11yLastClose = close; this._a11yOpener = document.activeElement; close.focus({ preventScroll: true }); }
+      else if (!close && this._a11yLastClose) { this._a11yLastClose = null; const o = this._a11yOpener; this._a11yOpener = null; if (o && o.isConnected && o !== document.body) o.focus({ preventScroll: true }); }
+    };
+    this._a11yTag(); this._a11yObs = new MutationObserver(this._a11yTag); this._a11yObs.observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ['data-open'] });
+    this._a11yKey = (e) => {
+      if (e.key === 'Escape') { if (this._escClose) return; const cs = document.querySelectorAll('[role="button"][aria-label="Close"]'); const c = cs[cs.length - 1]; if (c) c.click(); return; }
+      if ((e.key === 'Enter' || e.key === ' ') && e.target && e.target.getAttribute && e.target.getAttribute('role') === 'button' && e.target.tagName !== 'A' && e.target.tagName !== 'BUTTON') { e.preventDefault(); e.target.click(); }
+    };
+    document.addEventListener('keydown', this._a11yKey);
+    // glass: pointer-tracked specular highlight on any [data-glass] surface
+    this._glassMove = (e) => { const g = e.target && e.target.closest && e.target.closest('[data-glass]'); if (!g) return; const r = g.getBoundingClientRect(); g.style.setProperty('--gx', ((e.clientX - r.left) / r.width * 100).toFixed(1) + '%'); g.style.setProperty('--gy', ((e.clientY - r.top) / r.height * 100).toFixed(1) + '%'); };
+    document.addEventListener('pointermove', this._glassMove, { passive: true });
     // Safari/iOS block autoplay unless muted is a real DOM attribute AND play() is called after load; keep retrying until every clip is actually playing
+    const clipStart = performance.now();
     const kick = () => {
       const vids = document.querySelectorAll('video[data-clip]');
       let allPlaying = vids.length > 0;
       vids.forEach((v) => {
         v.muted = true; v.defaultMuted = true; v.loop = true; v.playsInline = true; v.controls = false;
         v.setAttribute('muted', ''); v.setAttribute('playsinline', ''); v.setAttribute('webkit-playsinline', '');
-        if (v.paused) { allPlaying = false; const p = v.play(); if (p && p.catch) p.catch(() => {}); }
+        // Safari needs byte-range support for <video src>; hosts without it leave the element source-less
+        // (error, NO_SOURCE, or stuck at readyState 0). Fall back to fetch → blob URL; play() fires on 'canplay'.
+        const dead = v.error || v.networkState === 3 || (v.readyState === 0 && performance.now() - clipStart > 1500);
+        if (dead && !v.dataset.blobbed) {
+          v.dataset.blobbed = '1';
+          const src = v.getAttribute('src');
+          fetch(src).then((r) => r.blob()).then((b) => {
+            const url = URL.createObjectURL(b); (this._blobUrls = this._blobUrls || []).push(url);
+            v.addEventListener('canplay', () => { const p = v.play(); if (p && p.catch) p.catch(() => {}); }, { once: true });
+            v.src = url; v.load();
+          }).catch(() => { delete v.dataset.blobbed; });
+        }
+        if (v.paused || v.readyState < 3) { allPlaying = false; if (v.readyState >= 3) { const p = v.play(); if (p && p.catch) p.catch(() => {}); } }
       });
       return allPlaying;
     };
-    this._clipTimer = setInterval(() => { if (kick()) clearInterval(this._clipTimer); }, 400);
-    setTimeout(() => clearInterval(this._clipTimer), 15000);
+    this._clipTimer = setInterval(() => { if (kick() || performance.now() - clipStart > 90000) clearInterval(this._clipTimer); }, 400);
     this._clipVis = () => { if (!document.hidden) kick(); };
     document.addEventListener('visibilitychange', this._clipVis);
     window.addEventListener('pointerdown', kick, { passive: true });
     window.addEventListener('scroll', kick, { once: true, passive: true });
-    this._escClose = (e) => {
-      
-    };
-    window.addEventListener("keydown", this._escClose);
     const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
     const arm = () => {
       const els = document.querySelectorAll('[data-reveal]:not([data-revealed])');
       if (!els.length) return;
+      const vh = window.innerHeight || 800;
       els.forEach(el => {
         el.dataset.revealed = "armed";
         if (reduced) return;
+        const r = el.getBoundingClientRect();
+        // already in view: never hide-then-show (that blink read as a flash after the page fade)
+        if (r.top < vh * 0.94 && r.bottom > 0) {
+          el.style.opacity = "0"; el.style.transform = "translateY(12px)";
+          el.style.transition = "opacity 0.6s ease, transform 0.6s ease";
+          requestAnimationFrame(() => requestAnimationFrame(() => { el.style.opacity = "1"; el.style.transform = "none"; el.dataset.revealed = "shown"; }));
+          return;
+        }
         el.style.opacity = "0";
         el.style.transform = "translateY(28px)";
         el.style.transition = "opacity 0.9s ease, transform 0.9s ease";
@@ -326,9 +406,9 @@ class Component extends DCLogic {
   }
 
   componentWillUnmount() {
+    (this._blobUrls || []).forEach((u) => URL.revokeObjectURL(u));
     if (this._clipKick) clearInterval(this._clipKick);
     if (this._clipVis) document.removeEventListener('visibilitychange', this._clipVis);
-    if (this._escClose) window.removeEventListener("keydown", this._escClose);
     document.body.style.overflow = "";
     if (this._revealObs) this._revealObs.disconnect();
     if (this._revealT) clearInterval(this._revealT);
@@ -379,5 +459,6 @@ class Component extends DCLogic {
   }
 }
 </script>
+<div id="dc-end" hidden></div>
 </body>
 </html>

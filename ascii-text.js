@@ -180,7 +180,8 @@
     connectedCallback() {
       this.style.position = this.style.position || 'absolute'; this.style.inset = '0'; this.style.display = 'block';
       var self = this;
-      var lite = matchMedia('(hover: none), (max-width: 840px)').matches;
+      // text fallback only when WebGL itself is unavailable (ASCII effect renders on phones too)
+      var lite = (function () { try { var c = document.createElement('canvas'); return !(c.getContext('webgl') || c.getContext('experimental-webgl')); } catch (e) { return true; } })();
       if (lite) { self.setAttribute('data-ascii-fallback', ''); self.textContent = ''; var f = document.createElement('span'); f.textContent = self.getAttribute('text') || ''; f.style.cssText = "position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-family:'Cormorant Garamond',serif; font-size:clamp(2.4rem,9vw,4.2rem); letter-spacing:0.08em; color:#e9edf7; text-shadow:0 0 22px rgba(143,176,255,0.5), 0 0 60px rgba(95,125,255,0.25);"; self.appendChild(f); return; }
       var start = function () {
         if (!window.THREE) { setTimeout(start, 60); return; }
@@ -189,7 +190,7 @@
         var reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
         var opts = {
           text: self.getAttribute('text') || 'David!',
-          asciiFontSize: parseFloat(self.getAttribute('ascii-font-size')) || 8,
+          asciiFontSize: (parseFloat(self.getAttribute('ascii-font-size')) || 8) * (r.width < 600 ? 0.6 : 1),
           textFontSize: parseFloat(self.getAttribute('text-font-size')) || 200,
           textColor: self.getAttribute('text-color') || '#fdf9f3',
           planeBaseHeight: parseFloat(self.getAttribute('plane-base-height')) || 8,
